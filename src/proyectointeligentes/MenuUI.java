@@ -95,14 +95,14 @@ public class MenuUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int tamaño=Integer.parseInt(jTextField1.getText());
-        new MapaUI(tamaño, null);
+        new MapaUI(tamaño, null, null);
         this.dispose();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cargarCiudadBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarCiudadBotonActionPerformed
         String archivo=JOptionPane.showInputDialog(this, "Ingrese el nombre del mapa", "Cargar Ciudad", JOptionPane.INFORMATION_MESSAGE);
-        new MapaUI(0, archivo);
+        new MapaUI(0, archivo, null);
         this.dispose();
     }//GEN-LAST:event_cargarCiudadBotonActionPerformed
 

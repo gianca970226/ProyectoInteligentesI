@@ -21,13 +21,16 @@ public class MapaUI extends javax.swing.JFrame {
     Mapa mapa;
     AreaItems areaItems;
     ArrayList<Agente> agentes;
+    ArrayList<AgenteJADE> agentesJADE;
+    
 
     /**
      * Creates new form Menu
      *
      * @param tamaño del mapa
+     * @param archivo nombre del archivo en donde esta cargado el mapa
      */
-    public MapaUI(int tamaño, String archivo) {
+    public MapaUI(int tamaño, String archivo, ArrayList<AgenteJADE> agentesJADE) {
         initComponents();
         grafica = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         grafica.setFullScreenWindow(this);
@@ -44,7 +47,7 @@ public class MapaUI extends javax.swing.JFrame {
             agentes=util.actualizarAgentes(mapa);
             
         }
-
+        panel1.setMapa(mapa);
         graficarAreaItems();
         setResizable(false);
         setVisible(true);
@@ -76,7 +79,6 @@ public class MapaUI extends javax.swing.JFrame {
             }
         }
         mapa = new Mapa(mapaM, tamaño, anchoCuadro, altoCuadro, anchoMapa, altoMapa);
-        panel1.setMapa(mapa);
     }
 
     /**
@@ -90,6 +92,7 @@ public class MapaUI extends javax.swing.JFrame {
 
         panel1 = new proyectointeligentes.Panel();
         guardarCiudadBoton = new javax.swing.JButton();
+        ejecutarJuego = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +103,13 @@ public class MapaUI extends javax.swing.JFrame {
             }
         });
 
+        ejecutarJuego.setText("Ejecutar");
+        ejecutarJuego.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ejecutarJuegoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -107,13 +117,17 @@ public class MapaUI extends javax.swing.JFrame {
             .addGroup(panel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(guardarCiudadBoton)
-                .addContainerGap(783, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(ejecutarJuego)
+                .addContainerGap(692, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                 .addContainerGap(566, Short.MAX_VALUE)
-                .addComponent(guardarCiudadBoton)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guardarCiudadBoton)
+                    .addComponent(ejecutarJuego))
                 .addContainerGap())
         );
 
@@ -135,7 +149,12 @@ public class MapaUI extends javax.swing.JFrame {
         String archivo = JOptionPane.showInputDialog(this, "Ingrese el nombre del mapa", "Guardar Ciudad", JOptionPane.INFORMATION_MESSAGE);
         Util util = new Util();
         util.GuardarMapa(mapa, archivo);
+        JOptionPane.showMessageDialog(this, "Guardado con exito el mapa", "Exito al guardar mapa", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_guardarCiudadBotonActionPerformed
+
+    private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
+        
+    }//GEN-LAST:event_ejecutarJuegoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,12 +189,13 @@ public class MapaUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MapaUI(0, null).setVisible(true);
+                new MapaUI(0, null, null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ejecutarJuego;
     private javax.swing.JButton guardarCiudadBoton;
     private proyectointeligentes.Panel panel1;
     // End of variables declaration//GEN-END:variables

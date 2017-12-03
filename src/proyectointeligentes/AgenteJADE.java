@@ -5,19 +5,23 @@
  */
 package proyectointeligentes;
 
-import java.awt.Rectangle;
+import jade.gui.GuiAgent;
+import jade.gui.GuiEvent;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class Muro extends Cuadro{
+public class AgenteJADE extends GuiAgent {
+    
+    private int comando=-1;
+    transient protected MapaUI mapa;
 
-    public Muro(int i, int j) {
-        super(i, j);
-        setRutaImagen("img/muro.png");
-        setTipo("muro");
+    @Override
+    protected void onGuiEvent(GuiEvent ge) {
+        
     }
-
+    
+    
     
 }

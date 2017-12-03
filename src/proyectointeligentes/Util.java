@@ -73,10 +73,34 @@ public class Util {
             while ((linea = br.readLine()) != null) {
                 String columnas[] = linea.split(",");
                 for (int j = 0; j < columnas.length; j++) {
-                    if ("-".equals(columnas[i])) {
+                    if ("agente".equals(columnas[j])) {
                         mapaM[i][j] = new Agente(i, j);
                         Rectangle area = new Rectangle(mapa.getAnchoCuadro() * j, mapa.getAltoCuadro() * i, mapa.getAnchoCuadro(), mapa.getAltoCuadro());
-                        mapaM[i][i].setArea(area);
+                        mapaM[i][j].setArea(area);
+                    }
+                    else if("caja".equals(columnas[j]))
+                    {
+                        mapaM[i][j] = new Caja(i, j);
+                        Rectangle area = new Rectangle(mapa.getAnchoCuadro() * j, mapa.getAltoCuadro() * i, mapa.getAnchoCuadro(), mapa.getAltoCuadro());
+                        mapaM[i][j].setArea(area);
+                    }
+                    else if("cuadro".equals(columnas[j]))
+                    {
+                        mapaM[i][j] = new Cuadro(i, j);
+                        Rectangle area = new Rectangle(mapa.getAnchoCuadro() * j, mapa.getAltoCuadro() * i, mapa.getAnchoCuadro(), mapa.getAltoCuadro());
+                        mapaM[i][j].setArea(area);
+                    }
+                    else if("marcador".equals(columnas[j]))
+                    {
+                        mapaM[i][j] = new Marcador(i, j);
+                        Rectangle area = new Rectangle(mapa.getAnchoCuadro() * j, mapa.getAltoCuadro() * i, mapa.getAnchoCuadro(), mapa.getAltoCuadro());
+                        mapaM[i][j].setArea(area);
+                    }
+                    else
+                    {
+                        mapaM[i][j] = new Muro(i, j);
+                        Rectangle area = new Rectangle(mapa.getAnchoCuadro() * j, mapa.getAltoCuadro() * i, mapa.getAnchoCuadro(), mapa.getAltoCuadro());
+                        mapaM[i][j].setArea(area);
                     }
                 }
                 i++;
