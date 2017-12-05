@@ -10,11 +10,22 @@ package proyectointeligentes;
  * @author JORGE_ALEJANDRO
  */
 public class Agente extends Cuadro {
-    
+    private boolean asignado;
     public Agente(int i, int j) {
         super(i, j);
         setRutaImagen("img/agente.png");
-        setTipo("agente");
+//        setTipo("agente");
+        asignado=false;
     }
+
+    public boolean isAsignado() {
+        return asignado;
+    }
+
+    public void setAsignado(boolean asignado) {
+        this.asignado = asignado;
+    }
+    
+    
     
 }

@@ -13,11 +13,23 @@ import java.awt.Rectangle;
  */
 public class Caja extends Cuadro{
     
+    private boolean asignado;
     public Caja(int i, int j) {
         super(i, j);
         setRutaImagen("img/caja.png");
-        setTipo("caja");
+//        setTipo("caja");
+        asignado=false;
     }
+
+    public boolean isAsignado() {
+        return asignado;
+    }
+
+    public void setAsignado(boolean asignado) {
+        this.asignado = asignado;
+    }
+    
+    
 
     
     

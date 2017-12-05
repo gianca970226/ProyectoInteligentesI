@@ -12,12 +12,22 @@ import java.awt.Rectangle;
  * @author JORGE_ALEJANDRO
  */
 public class Marcador extends Cuadro{
-    
+    private boolean asignado;
     public Marcador(int i, int j) {
         super(i, j);
         setRutaImagen("img/marcador.png");
-        setTipo("marcador");
+//        setTipo("marcador");
+        asignado=false;
     }
+
+    public boolean isAsignado() {
+        return asignado;
+    }
+
+    public void setAsignado(boolean asignado) {
+        this.asignado = asignado;
+    }
+    
     
     
 }

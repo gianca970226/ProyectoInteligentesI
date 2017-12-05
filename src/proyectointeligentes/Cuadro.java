@@ -16,17 +16,14 @@ public class Cuadro implements Cloneable {
     private int j;
     private Rectangle area;
     private String rutaImagen;
-    private String tipo;
-    private int f;
-    private int g;
-    private int h;
+//    private String tipo;
 
     public Cuadro(int i, int j) {
         this.i = i;
         this.j = j;
         this.area = null;
         this.rutaImagen = "img/cuadro.png";
-        this.tipo = "cuadro";
+//        this.tipo = "cuadro";
     }
     
     public Rectangle getArea() {
@@ -61,39 +58,15 @@ public class Cuadro implements Cloneable {
         this.rutaImagen = rutaImagen;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
+//    public String getTipo() {
+//        return tipo;
+//    }
+//
+//    public void setTipo(String tipo) {
+//        this.tipo = tipo;
+//    }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getF() {
-        return f;
-    }
-
-    public int getG() {
-        return g;
-    }
-
-    public int getH() {
-        return h;
-    }
-
-    public void setF(int f) {
-        this.f = f;
-    }
-
-    public void setG(int g) {
-        this.g = g;
-    }
-
-    public void setH(int h) {
-        this.h = h;
-    }
-    
-       
+     
     
     public Object clone() {
         Object obj = null;

@@ -16,7 +16,7 @@ public class Muro extends Cuadro{
     public Muro(int i, int j) {
         super(i, j);
         setRutaImagen("img/muro.png");
-        setTipo("muro");
+//        setTipo("muro");
     }
 
     

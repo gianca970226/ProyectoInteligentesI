@@ -36,7 +36,26 @@ public class Util {
                     if (mapa.getMapaM()[i][j] == null) {
                         linea = linea + "-,";
                     } else {
-                        linea = linea + mapa.getMapaM()[i][j].getTipo() + ",";
+                        if (mapa.getMapaM()[i][j] instanceof Agente)
+                        {
+                            linea = linea + "agente" + ",";
+                        }
+                        else if (mapa.getMapaM()[i][j] instanceof Muro)
+                        {
+                            linea = linea + "muro" + ",";
+                        }
+                        else if (mapa.getMapaM()[i][j] instanceof Marcador)
+                        {
+                            linea = linea + "marcador" + ",";
+                        }
+                        else if (mapa.getMapaM()[i][j] instanceof Caja)
+                        {
+                            linea = linea + "caja" + ",";
+                        }
+                        else
+                        {
+                            linea = linea + "cuadro" + ",";
+                        }
                     }
                 }
                 linea = linea.substring(0, linea.length() - 1);
@@ -141,7 +160,7 @@ public class Util {
         {
             for (int j=0; j<mapa.getMapaM().length; j++)
             {
-                if (mapa.getMapaM()[i][j].getTipo().equals("agente"))
+                if (mapa.getMapaM()[i][j] instanceof Agente)
                 {
                     agentes.add((Agente) mapa.getMapaM()[i][j]);
                 }
