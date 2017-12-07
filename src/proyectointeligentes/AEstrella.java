@@ -5,8 +5,7 @@
  */
 package proyectointeligentes;
 
-import java.awt.Point;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
 
 /**
@@ -19,6 +18,7 @@ public class AEstrella {
     private Nodo fin;
     private LinkedList<Nodo>abierta;
     private LinkedList<Nodo>cerrada;
+    
 
     public AEstrella() {
         inicio = null;
@@ -54,7 +54,16 @@ public class AEstrella {
         cerrada.add(inicio);
     }
     
-    public void vecinos(Nodo posicion, Mapa mapa)
+    public void ruta(Mapa mapa)
+    {
+        abierta=vecinos(inicio, mapa);
+        while (objetivo())
+        {
+            buscar(mapa);
+        }
+    }
+    
+    public LinkedList<Nodo> vecinos(Nodo posicion, Mapa mapa)
     {
         LinkedList<Nodo>vecinos=new LinkedList<>();
         if (!(mapa.getMapaM()[posicion.getI()+1][posicion.getJ()] instanceof Muro))
@@ -85,6 +94,7 @@ public class AEstrella {
             vecino.distancias(fin);
             vecinos.add(vecino);
         }
+        return vecinos;
         
     }
     
@@ -100,12 +110,15 @@ public class AEstrella {
         return true;
     }
     
-    public void buscar()
+    public void buscar(Mapa mapa)
     {
-        
+        fMenor();
+        Nodo seleccionado=cerrada.getLast();
+        LinkedList<Nodo>vecinos=vecinos(seleccionado, mapa);
+        evaluacionVecinos(vecinos, seleccionado);
     }
     
-    public void fMenor()
+    private void fMenor()
     {
         Nodo actual=abierta.get(0);
         int n=0;
@@ -117,5 +130,49 @@ public class AEstrella {
                 n=i;
             }
         }
+        cerrada.add(abierta.get(n));
+        abierta.remove(n);
+    }
+    
+    public void evaluacionVecinos(LinkedList<Nodo>vecinos, Nodo seleccionado)
+    {
+        for (int i=0; i<vecinos.size(); i++)
+        {
+            if (existe(vecinos.get(i), cerrada))
+            {
+                continue;
+            }
+            else if (!existe(vecinos.get(i), abierta))
+            {
+                abierta.add(vecinos.get(i));
+            }
+            else
+            {
+                if (seleccionado.getG()+1<vecinos.get(i).getG())
+                {
+                    for (int j=0; j<abierta.size(); j++)
+                    {
+                        if (vecinos.get(i).getI()==abierta.get(j).getI() &&vecinos.get(i).getJ()==abierta.get(j).getJ())
+                        {
+                            abierta.remove(j);
+                            abierta.add(vecinos.get(i));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public boolean existe(Nodo nodo,LinkedList<Nodo>nodos)
+    {
+        for (int i=0; i<nodos.size(); i++)
+        {
+            if (nodos.get(i).getI()==nodo.getI() && nodos.get(i).getJ()==nodo.getJ())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
