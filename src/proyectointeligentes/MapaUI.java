@@ -9,6 +9,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,7 +23,6 @@ public class MapaUI extends javax.swing.JFrame {
     AreaItems areaItems;
     ArrayList<Agente> agentes;
     ArrayList<AgenteJADE> agentesJADE;
-    
 
     /**
      * Creates new form Menu
@@ -39,13 +39,11 @@ public class MapaUI extends javax.swing.JFrame {
             agentes = new ArrayList<>();
             panel1.setAgentes(agentes);
             crearMapa(tamaño);
-        }
-        else
-        {
-            Util util=new Util();
-            mapa=util.cargarMapa(this.getWidth(), this.getHeight(), archivo);
-            agentes=util.actualizarAgentes(mapa);
-            
+        } else {
+            Util util = new Util();
+            mapa = util.cargarMapa(this.getWidth(), this.getHeight(), archivo);
+            agentes = util.actualizarAgentes(mapa);
+
         }
         panel1.setMapa(mapa);
         graficarAreaItems();
@@ -153,7 +151,11 @@ public class MapaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarCiudadBotonActionPerformed
 
     private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
-        
+        AEstrella AEstrella = new AEstrella();
+        LinkedList<Nodo> camino = AEstrella.start(mapa);
+        for (int i = 0; i < camino.size(); i++) {
+            System.out.println(camino.get(i).getI() + "-" + camino.get(i).getJ());
+        }
     }//GEN-LAST:event_ejecutarJuegoActionPerformed
 
     /**
