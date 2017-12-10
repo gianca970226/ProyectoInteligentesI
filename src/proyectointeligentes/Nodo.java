@@ -15,18 +15,14 @@ public class Nodo extends Cuadro {
     private int g;
     private int h;
     private Nodo padre;
-    private Nodo hijo;
-    private Nodo siguiente;
     private boolean visitado;
     
-    public Nodo(int i, int j, Nodo fin) {
-        super(i, j);
+    public Nodo(Cuadro nodo) {
+        super(nodo.getI(), nodo.getJ());
         f=-1;
         g=-1;
         h=-1;
         padre=null;
-        hijo=null;
-        siguiente=null;
         visitado=false;
     }
     
@@ -79,25 +75,8 @@ public class Nodo extends Cuadro {
         return padre;
     }
 
-    public Nodo getSiguiente() {
-        return siguiente;
-    }
-
-    public Nodo getHijo() {
-        return hijo;
-    }
-
     public void setPadre(Nodo padre) {
         this.padre = padre;
-    }
-
-    public void setHijo(Nodo hijo) {
-        this.hijo = hijo;
-    }
-
-    public void setSiguiente(Nodo siguiente) {
-        this.siguiente = siguiente;
     }  
-    
     
 }

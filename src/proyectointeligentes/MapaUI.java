@@ -151,8 +151,14 @@ public class MapaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarCiudadBotonActionPerformed
 
     private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
-        AEstrella AEstrella = new AEstrella();
-        LinkedList<Nodo> camino = AEstrella.start(mapa);
+        AEstrella aEstrella = new AEstrella();
+        LinkedList<Nodo> camino = aEstrella.iniciar(mapa);
+        Agente agente=(Agente) mapa.getMapaM()[aEstrella.getInicio().getI()][aEstrella.getInicio().getJ()];
+        agente.setMapa(mapa);
+        agente.setPanel(panel1);
+        agente.setCamino(camino);
+        Thread hilo=new Thread(agente);
+        hilo.start();
         for (int i = 0; i < camino.size(); i++) {
             System.out.println(camino.get(i).getI() + "-" + camino.get(i).getJ());
         }
