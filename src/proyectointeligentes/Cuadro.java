@@ -6,17 +6,20 @@
 package proyectointeligentes;
 
 import java.awt.Rectangle;
+import java.util.LinkedList;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
 public class Cuadro implements Cloneable {
+
     private int i;
     private int j;
     private Rectangle area;
     private String rutaImagen;
 //    private String tipo;
+    
 
     public Cuadro(int i, int j) {
         this.i = i;
@@ -24,8 +27,11 @@ public class Cuadro implements Cloneable {
         this.area = null;
         this.rutaImagen = "img/cuadro.png";
 //        this.tipo = "cuadro";
+        
     }
+
     
+
     public Rectangle getArea() {
         return area;
     }
@@ -65,9 +71,8 @@ public class Cuadro implements Cloneable {
 //    public void setTipo(String tipo) {
 //        this.tipo = tipo;
 //    }
-
-     
     
+
     public Object clone() {
         Object obj = null;
         try {

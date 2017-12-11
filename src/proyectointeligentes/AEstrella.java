@@ -25,22 +25,22 @@ public class AEstrella {
         cerrada = new LinkedList<>();
 
     }
-    public LinkedList<Nodo> iniciar(Mapa mapa)
-    {
-        cargarInicioFin(mapa);
-        LinkedList<Nodo> camino= ruta(mapa);
-        return  camino;
-    }
-    public void cargarInicioFin(Mapa mapa) {
-        for (int i = 0; i < mapa.getMapaM().length && (inicio == null || fin == null); i++) {
-            for (int j = 0; j < mapa.getMapaM().length && (inicio == null || fin == null); j++) {
 
+    public LinkedList<Nodo> ejecutar(Mapa mapa) {
+        LinkedList<Nodo> camino = ruta(mapa);
+        return camino;
+    }
+
+    public void cargarInicioFinAgenteCaja(Mapa mapa) {
+        
+        for (int i = 0; i < mapa.getMapaM().length && (inicio == null); i++) {
+            for (int j = 0; j < mapa.getMapaM().length && (inicio == null); j++) {
                 if (mapa.getMapaM()[i][j] instanceof Agente && inicio == null) {
                     Agente agente = (Agente) mapa.getMapaM()[i][j];
                     if (!agente.isAsignado()) {
                         agente.setAsignado(true);
                         mapa.getMapaM()[i][j] = agente;
-                        inicio =new Nodo(mapa.getMapaM()[i][j]);     
+                        inicio = new Nodo(mapa.getMapaM()[i][j]);
                     }
 
                 }
@@ -56,41 +56,84 @@ public class AEstrella {
         }
         cerrada.add(inicio);
     }
+    
+    public void actualizarFin(Nodo fin)
+    {
+        this.fin=fin;
+    }
 
+    public void cargarInicioFinCajaMarcador(Mapa mapa, Nodo inicio) {
+        this.inicio=inicio;
+        for (int i = 0; i < mapa.getMapaM().length && fin == null; i++) {
+            for (int j = 0; j < mapa.getMapaM().length && fin == null; j++) {
+                if (mapa.getMapaM()[i][j] instanceof Marcador && fin == null) {
+                    Marcador marcador = (Marcador) mapa.getMapaM()[i][j];
+                    if (!marcador.isAsignado()) {
+                        marcador.setAsignado(true);
+                        mapa.getMapaM()[i][j] = marcador;
+                        fin = new Nodo(mapa.getMapaM()[i][j]);
+                    }
+                }
+            }
+        }
+        cerrada.add(inicio);
+    }
+
+//    public void cargarInicioFinCajaMarcador(Mapa mapa) {
+//        for (int i = 0; i < mapa.getMapaM().length && (inicio == null || fin == null); i++) {
+//            for (int j = 0; j < mapa.getMapaM().length && (inicio == null || fin == null); j++) {
+//
+//                if (mapa.getMapaM()[i][j] instanceof Caja && inicio == null) {
+//                    Caja caja = (Caja) mapa.getMapaM()[i][j];
+//                    if (!caja.isAsignado()) {
+//                        caja.setAsignado(true);
+//                        mapa.getMapaM()[i][j] = caja;
+//                        inicio =new Nodo(mapa.getMapaM()[i][j]);     
+//                    }
+//
+//                }
+//                if (mapa.getMapaM()[i][j] instanceof Marcador && fin == null) {
+//                    Marcador marcador = (Marcador) mapa.getMapaM()[i][j];
+//                    if (!marcador.isAsignado()) {
+//                        marcador.setAsignado(true);
+//                        mapa.getMapaM()[i][j] = marcador;
+//                        fin = new Nodo(mapa.getMapaM()[i][j]);
+//                    }
+//                }
+//            }
+//        }
+//        cerrada.add(inicio);
+//    }
     public LinkedList<Nodo> ruta(Mapa mapa) {
         abierta = vecinos(inicio, mapa);
         while (objetivo()) {
             buscar(mapa);
         }
         LinkedList<Nodo> camino = camino();
-        return  camino;
-    }
-    public LinkedList<Nodo> camino()
-    {
-        LinkedList<Nodo> camino= new LinkedList<>();
-        Nodo objetivo= null;
-
-        for (int i = 0; i < abierta.size(); i++) {
-            if(fin.getI()==abierta.get(i).getI()&& fin.getJ()==abierta.get(i).getJ())
-            {
-                objetivo= abierta.get(i);
-            }
-        }
-        while(objetivo.getPadre()!=null)
-        {
-            camino.add(objetivo);
-            objetivo=objetivo.getPadre();
-        }
-     
-        camino=reversa(camino);
         return camino;
     }
-    
-    public LinkedList<Nodo> reversa(LinkedList<Nodo> camino)
-    {
-        LinkedList<Nodo> reversa=new LinkedList<>();
-        for (int i=camino.size()-1; i>=0; i--)
-        {
+
+    public LinkedList<Nodo> camino() {
+        LinkedList<Nodo> camino = new LinkedList<>();
+        Nodo objetivo = null;
+
+        for (int i = 0; i < abierta.size(); i++) {
+            if (fin.getI() == abierta.get(i).getI() && fin.getJ() == abierta.get(i).getJ()) {
+                objetivo = abierta.get(i);
+            }
+        }
+        while (objetivo.getPadre() != null) {
+            camino.add(objetivo);
+            objetivo = objetivo.getPadre();
+        }
+
+        camino = reversa(camino);
+        return camino;
+    }
+
+    public LinkedList<Nodo> reversa(LinkedList<Nodo> camino) {
+        LinkedList<Nodo> reversa = new LinkedList<>();
+        for (int i = camino.size() - 1; i >= 0; i--) {
             reversa.add(camino.get(i));
         }
         return reversa;
@@ -99,28 +142,28 @@ public class AEstrella {
     public LinkedList<Nodo> vecinos(Nodo posicion, Mapa mapa) {
         LinkedList<Nodo> vecinos = new LinkedList<>();
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Muro)) {
-        if (!(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Muro)) {
+        if (posicion.getI() + 1 < mapa.getN() && !(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Muro)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()]);
             vecino.setPadre(posicion);
             vecino.distancias(fin);
             vecinos.add(vecino);
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) &&!(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Muro)) {
-        if (!(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Muro)) {
+        if (posicion.getI() - 1 >= 0 && !(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Muro)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()]);
             vecino.setPadre(posicion);
             vecino.distancias(fin);
             vecinos.add(vecino);
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Muro)) {
-        if (!(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Muro)) {
+        if (posicion.getJ() + 1 < mapa.getN() && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Muro)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1]);
             vecino.setPadre(posicion);
             vecino.distancias(fin);
             vecinos.add(vecino);
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Muro)) {
-        if (!(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Muro)) {
+        if (posicion.getJ() - 1 >= 0 && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Muro)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1]);
             vecino.setPadre(posicion);
             vecino.distancias(fin);
@@ -129,7 +172,7 @@ public class AEstrella {
         return vecinos;
 
     }
-    
+
 //    private boolean limites(int posicion, Mapa mapa)
 //    {
 //        if (posicion>=0 && posicion<mapa.getN())
@@ -141,7 +184,6 @@ public class AEstrella {
 //            return false;
 //        }
 //    }
-
     public boolean objetivo() {
         for (int i = 0; i < abierta.size(); i++) {
             if (fin.getI() == abierta.get(i).getI() && fin.getJ() == abierta.get(i).getJ()) {
@@ -203,6 +245,9 @@ public class AEstrella {
     public Nodo getInicio() {
         return inicio;
     }
-    
-    
+
+    public Nodo getFin() {
+        return fin;
+    }
+
 }

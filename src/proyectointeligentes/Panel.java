@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.ImageIcon;
 
 /**
@@ -27,10 +28,13 @@ public class Panel extends javax.swing.JPanel {
     private Cuadro itemSeleccionado;
     private int xItemSeleccionado;
     private int yItemSeleccionado;
-    private ArrayList<Agente>agentes;
+    private Caja cajaMovimiento;
+    private Agente agenteMovimiento;
 
     public Panel() {
         initComponents();
+        cajaMovimiento=null;
+        agenteMovimiento=null;
     }
 
     /**
@@ -108,12 +112,10 @@ public class Panel extends javax.swing.JPanel {
             //Se le setea su area
             Rectangle area = new Rectangle(evt.getX(), evt.getY(), mapa.getAnchoCuadro(), mapa.getAltoCuadro());
             auxItemSeleccionado.setArea(area);
+            auxItemSeleccionado.setI(i);
+            auxItemSeleccionado.setJ(j);
             //Se almacena en la matriz
             mapa.getMapaM()[i][j]=auxItemSeleccionado;
-            if (mapa.getMapaM()[i][j] instanceof Agente)
-            {
-               agentes.add((Agente) mapa.getMapaM()[i][j]);
-            }
         }
         repaint();
     }//GEN-LAST:event_formMouseReleased
@@ -134,7 +136,12 @@ public class Panel extends javax.swing.JPanel {
             pintarItems(g);
             
             g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa());
-            pintarCiudad(g);
+            pintarMapa(g);
+            if (cajaMovimiento!=null) {
+                g.drawImage(new ImageIcon(getClass().getResource(cajaMovimiento.getRutaImagen())).getImage(), (int) cajaMovimiento.getArea().getX(), (int) cajaMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
+            }
+            
+            
             //pinta la anamiacion de colocar imagen en el tablero
             //El 0 es el X1 de la ciudad.
             if (banderaSeleccionado && xItemSeleccionado > 0 && xItemSeleccionado < mapa.getAnchoMapa() && yItemSeleccionado > 0 && yItemSeleccionado < mapa.getAltoMapa()) {
@@ -143,6 +150,7 @@ public class Panel extends javax.swing.JPanel {
                 int j = xItemSeleccionado / mapa.getAnchoCuadro();
                 g.drawRect(j * mapa.getAnchoCuadro(), i * mapa.getAltoCuadro(), mapa.getAnchoCuadro(), mapa.getAltoCuadro());
             }
+            
         }
     }
 
@@ -159,7 +167,7 @@ public class Panel extends javax.swing.JPanel {
      *
      * @param g grafico del panel que sirve como lienzo
      */
-    private void pintarCiudad(Graphics g) {
+    private void pintarMapa(Graphics g) {
         for (int i = 0; i < mapa.getN(); i++) {
             for (int j = 0; j < mapa.getN(); j++) {
                 if (mapa.getMapaM()[i][j] != null) {
@@ -186,9 +194,27 @@ public class Panel extends javax.swing.JPanel {
         return areaItems;
     }
 
-    public void setAgentes(ArrayList<Agente> agentes) {
-        this.agentes = agentes;
+    public Caja getCajaMovimiento() {
+        return cajaMovimiento;
     }
+
+    public void setCajaMovimiento(Caja cajaMovimiento) {
+        this.cajaMovimiento = cajaMovimiento;
+    }
+
+    public Agente getAgenteMovimiento() {
+        return agenteMovimiento;
+    }
+
+    public void setAgenteMovimiento(Agente agenteMovimiento) {
+        this.agenteMovimiento = agenteMovimiento;
+    }
+
+    
+
+    
+    
+    
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

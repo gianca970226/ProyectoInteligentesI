@@ -21,7 +21,6 @@ public class MapaUI extends javax.swing.JFrame {
     GraphicsDevice grafica;
     Mapa mapa;
     AreaItems areaItems;
-    ArrayList<Agente> agentes;
     ArrayList<AgenteJADE> agentesJADE;
 
     /**
@@ -30,20 +29,16 @@ public class MapaUI extends javax.swing.JFrame {
      * @param tamaño del mapa
      * @param archivo nombre del archivo en donde esta cargado el mapa
      */
-    public MapaUI(int tamaño, String archivo, ArrayList<AgenteJADE> agentesJADE) {
+    public MapaUI(int tamaño, String archivo) {
         initComponents();
         grafica = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         grafica.setFullScreenWindow(this);
         panel1.setFocusable(true);
         if (archivo == null) {
-            agentes = new ArrayList<>();
-            panel1.setAgentes(agentes);
             crearMapa(tamaño);
         } else {
             Util util = new Util();
             mapa = util.cargarMapa(this.getWidth(), this.getHeight(), archivo);
-            agentes = util.actualizarAgentes(mapa);
-
         }
         panel1.setMapa(mapa);
         graficarAreaItems();
@@ -151,17 +146,53 @@ public class MapaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarCiudadBotonActionPerformed
 
     private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
-        AEstrella aEstrella = new AEstrella();
-        LinkedList<Nodo> camino = aEstrella.iniciar(mapa);
-        Agente agente=(Agente) mapa.getMapaM()[aEstrella.getInicio().getI()][aEstrella.getInicio().getJ()];
-        agente.setMapa(mapa);
-        agente.setPanel(panel1);
-        agente.setCamino(camino);
-        Thread hilo=new Thread(agente);
-        hilo.start();
-        for (int i = 0; i < camino.size(); i++) {
-            System.out.println(camino.get(i).getI() + "-" + camino.get(i).getJ());
+        AEstrella aEstrella1 = new AEstrella(); //Hago objeto de algoritmo estrella
+        aEstrella1.cargarInicioFinAgenteCaja(mapa); //Cargo los nodos posiciones del agente y la caja
+        int inicioI = aEstrella1.getInicio().getI(); //Obtengo las posiciones del nodo inicio que es el agente 
+        int inicioJ = aEstrella1.getInicio().getJ();
+        Agente agente = (Agente) mapa.getMapaM()[inicioI][inicioJ].clone(); //Obtengo el agente que se selecciono
+        panel1.setAgenteMovimiento(agente); //Seteo el agente en el panel
+        agente.setMapa(mapa); //seteo el mapa en el agente
+        agente.setPanel(panel1); //Seteo el panel en el agente
+        mapa.getMapaM()[inicioI][inicioJ] = new Cuadro(inicioI, inicioJ); //Hago un cuadro blanco en esa posicion
+        //HASTA AQUI EL AGENTE HAY QUE MODIFICAR EL CAMINO
+        AEstrella aEstrella2 = new AEstrella(); //Creo el otro objeto para el a estrella desde la caja al marcador
+        aEstrella2.cargarInicioFinCajaMarcador(mapa, aEstrella1.getFin()); //Cargo desde los nodos inicio y fin caja y marcador
+        LinkedList<Nodo> camino2 = aEstrella2.ejecutar(mapa); //Obtengo ese camino
+        Nodo cuadrar = camino2.getFirst(); //Como hay que cambiar el nodo fin del agente a la caja entonces tomo el primer nodo camino de la caja
+        inicioI=aEstrella2.getInicio().getI();
+        inicioJ=aEstrella2.getInicio().getJ();
+        Caja caja = (Caja) mapa.getMapaM()[inicioI][inicioJ].clone(); //Tomo la caja seleccionada
+        Nodo finAgente = null; //Nodo para cambiar el nodo fin al agente
+        if (caja.getI() + 1 == cuadrar.getI() && caja.getJ() == cuadrar.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
+            finAgente = new Nodo(mapa.getMapaM()[caja.getI()-1][caja.getJ()]);
         }
+        else if (caja.getI() - 1 == cuadrar.getI() && caja.getJ() == cuadrar.getJ())
+        {
+            finAgente = new Nodo(mapa.getMapaM()[caja.getI()+1][caja.getJ()]);
+        }
+        else if (caja.getJ() + 1 == cuadrar.getJ() && caja.getI() == cuadrar.getI())
+        {
+            finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ()-1]);
+        }
+        else
+        {
+            finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ()+1]);
+        }
+        aEstrella1.actualizarFin(finAgente); //Le actualizo el fin al primer algoritmo a estrella
+        LinkedList<Nodo> camino1 = aEstrella1.ejecutar(mapa); //Obtengo el camino del agente
+        agente.setCamino1(camino1); //Seteo el primer camino al agente
+        agente.setCamino2(camino2); //Luego el segundo camino
+        agente.setCajaAsignada(caja); //La caja que debe mover
+        panel1.setCajaMovimiento(caja); //Le doy la caja al panel para que lo pinte
+        panel1.setAgenteMovimiento(agente); //le doy el agente al panel para que lo pinte
+        
+//        for (int i = 0; i < camino2.size(); i++) {
+//            System.out.println(camino2.get(i).getI() + "-" + camino2.get(i).getJ());
+//        }
+        panel1.getAgenteMovimiento().start(); //Ejecuto el hilo
+
+
     }//GEN-LAST:event_ejecutarJuegoActionPerformed
 
     /**
@@ -197,7 +228,7 @@ public class MapaUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MapaUI(0, null, null).setVisible(true);
+                new MapaUI(0, null).setVisible(true);
             }
         });
     }
