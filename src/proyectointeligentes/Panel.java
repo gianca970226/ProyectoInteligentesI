@@ -140,6 +140,9 @@ public class Panel extends javax.swing.JPanel {
             if (cajaMovimiento!=null) {
                 g.drawImage(new ImageIcon(getClass().getResource(cajaMovimiento.getRutaImagen())).getImage(), (int) cajaMovimiento.getArea().getX(), (int) cajaMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
             }
+            if (agenteMovimiento!=null) {
+                g.drawImage(new ImageIcon(getClass().getResource(agenteMovimiento.getRutaImagen())).getImage(), (int) agenteMovimiento.getArea().getX(), (int) agenteMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
+            }
             
             
             //pinta la anamiacion de colocar imagen en el tablero

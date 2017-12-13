@@ -26,40 +26,11 @@ public class AEstrella {
 
     }
 
-    public LinkedList<Nodo> ejecutar(Mapa mapa) {
-        LinkedList<Nodo> camino = ruta(mapa);
-        return camino;
-    }
-
-    public void cargarInicioFinAgenteCaja(Mapa mapa) {
-        
-        for (int i = 0; i < mapa.getMapaM().length && (inicio == null); i++) {
-            for (int j = 0; j < mapa.getMapaM().length && (inicio == null); j++) {
-                if (mapa.getMapaM()[i][j] instanceof Agente && inicio == null) {
-                    Agente agente = (Agente) mapa.getMapaM()[i][j];
-                    if (!agente.isAsignado()) {
-                        agente.setAsignado(true);
-                        mapa.getMapaM()[i][j] = agente;
-                        inicio = new Nodo(mapa.getMapaM()[i][j]);
-                    }
-
-                }
-                if (mapa.getMapaM()[i][j] instanceof Caja && fin == null) {
-                    Caja caja = (Caja) mapa.getMapaM()[i][j];
-                    if (!caja.isAsignado()) {
-                        caja.setAsignado(true);
-                        mapa.getMapaM()[i][j] = caja;
-                        fin = new Nodo(mapa.getMapaM()[i][j]);
-                    }
-                }
-            }
-        }
+    public LinkedList<Nodo> ejecutar(Nodo inicio,Mapa mapa) {
         cerrada.add(inicio);
-    }
-    
-    public void actualizarFin(Nodo fin)
-    {
-        this.fin=fin;
+        LinkedList<Nodo> camino = ruta(mapa);
+         
+        return camino;
     }
 
     public void cargarInicioFinCajaMarcador(Mapa mapa, Nodo inicio) {
@@ -76,7 +47,7 @@ public class AEstrella {
                 }
             }
         }
-        cerrada.add(inicio);
+       
     }
 
 //    public void cargarInicioFinCajaMarcador(Mapa mapa) {

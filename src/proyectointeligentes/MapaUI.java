@@ -155,7 +155,7 @@ public class MapaUI extends javax.swing.JFrame {
         agente.setMapa(mapa); //seteo el mapa en el agente
         agente.setPanel(panel1); //Seteo el panel en el agente
         mapa.getMapaM()[inicioI][inicioJ] = new Cuadro(inicioI, inicioJ); //Hago un cuadro blanco en esa posicion
-        //HASTA AQUI EL AGENTE HAY QUE MODIFICAR EL CAMINO
+        //HASTA AQUI EL AGENTE HAY QUE MODIFICARLE EL CAMINO
         AEstrella aEstrella2 = new AEstrella(); //Creo el otro objeto para el a estrella desde la caja al marcador
         aEstrella2.cargarInicioFinCajaMarcador(mapa, aEstrella1.getFin()); //Cargo desde los nodos inicio y fin caja y marcador
         LinkedList<Nodo> camino2 = aEstrella2.ejecutar(mapa); //Obtengo ese camino
@@ -183,13 +183,14 @@ public class MapaUI extends javax.swing.JFrame {
         LinkedList<Nodo> camino1 = aEstrella1.ejecutar(mapa); //Obtengo el camino del agente
         agente.setCamino1(camino1); //Seteo el primer camino al agente
         agente.setCamino2(camino2); //Luego el segundo camino
-        agente.setCajaAsignada(caja); //La caja que debe mover
+//        agente.setCajaAsignada(caja); //La caja que debe mover
         panel1.setCajaMovimiento(caja); //Le doy la caja al panel para que lo pinte
         panel1.setAgenteMovimiento(agente); //le doy el agente al panel para que lo pinte
         
 //        for (int i = 0; i < camino2.size(); i++) {
 //            System.out.println(camino2.get(i).getI() + "-" + camino2.get(i).getJ());
 //        }
+        
         panel1.getAgenteMovimiento().start(); //Ejecuto el hilo
 
 
