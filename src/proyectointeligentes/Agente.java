@@ -96,7 +96,7 @@ public class Agente extends Cuadro implements Runnable{
             Cuadro siguiente = mapa.getMapaM()[nodo.getI()][nodo.getJ()];
             getArea().setLocation((int) siguiente.getArea().getX(), (int) siguiente.getArea().getY());
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -111,7 +111,7 @@ public class Agente extends Cuadro implements Runnable{
             getArea().setLocation((int) panel.getCajaMovimiento().getArea().getX(), (int) panel.getCajaMovimiento().getArea().getY());
             panel.getCajaMovimiento().getArea().setLocation((int)siguiente.getArea().getX(), (int)siguiente.getArea().getY());
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 System.out.println(ex.getMessage());
             }

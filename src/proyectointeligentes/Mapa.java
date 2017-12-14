@@ -5,6 +5,8 @@
  */
 package proyectointeligentes;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author JORGE_ALEJANDRO
@@ -16,6 +18,9 @@ public class Mapa {
     private int altoCuadro;//indica el alto del rectangulo de representacion de un componente
     private int anchoMapa;//indica el ancho del area de la ciudad 
     private int altoMapa;//indica el alto del area de la ciudad
+    private LinkedList<Agente> agentes;
+    private LinkedList<Marcador> marcadores;
+    private LinkedList<Caja> cajas;
 
     public Mapa(Cuadro[][] mapaM, int n, int anchoCuadro, int altoCuadro, int anchoMapa, int altoMapa) {
         this.mapaM = mapaM;
@@ -24,6 +29,28 @@ public class Mapa {
         this.altoCuadro = altoCuadro;
         this.anchoMapa = anchoMapa;
         this.altoMapa = altoMapa;
+        this.agentes= new LinkedList<>();
+        this.marcadores= new LinkedList<>();
+        this.cajas=new LinkedList<>();
+    }
+    public void EncontrarItems()
+    {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if(this.mapaM[i][j] instanceof Agente)
+                {
+                    agentes.add((Agente) this.mapaM[i][j]);
+                }
+                 if(this.mapaM[i][j] instanceof Caja)
+                {
+                    cajas.add((Caja) this.mapaM[i][j]);
+                }
+                  if(this.mapaM[i][j] instanceof Marcador)
+                {
+                    marcadores.add((Marcador) this.mapaM[i][j]);
+                }
+            }
+        }
     }
     /**
      * @return the mapaM
@@ -108,6 +135,19 @@ public class Mapa {
     public void setAltoMapa(int altoMapa) {
         this.altoMapa = altoMapa;
     }
+
+    public LinkedList<Agente> getAgentes() {
+        return agentes;
+    }
+
+    public LinkedList<Caja> getCajas() {
+        return cajas;
+    }
+
+    public LinkedList<Marcador> getMarcadores() {
+        return marcadores;
+    }
+    
     
     
     
