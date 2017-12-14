@@ -148,7 +148,7 @@ public class MapaUI extends javax.swing.JFrame {
     private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
         mapa.EncontrarItems();
         AEstrella aEstrella1 = new AEstrella(); //Hago objeto de algoritmo estrella
-
+        AEstrella1 aEstrella = new AEstrella1();
 //        aEstrella1.cargarInicioFinAgenteCaja(mapa); //Cargo los nodos posiciones del agente y la caja
         // int inicioI = ; //Obtengo las posiciones del nodo inicio que es el agente 
         // int inicioJ = aEstrella1.getInicio().getJ();
@@ -178,19 +178,19 @@ public class MapaUI extends javax.swing.JFrame {
             finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ() + 1]);
         }
         //aEstrella1.actualizarFin(finAgente); //Le actualizo el fin al primer algoritmo a estrella
-        LinkedList<Nodo> caminoAgenteCaja = aEstrella1.ejecutar(nodeAgente, finAgente, mapa); //Obtengo el camino del agente
+        LinkedList<Nodo> caminoAgenteCaja = aEstrella.ejecutar(nodeAgente, finAgente, mapa); //Obtengo el camino del agente
         agente.setCamino1(caminoAgenteCaja); //Seteo el primer camino al agente
         Nodo auxNodoInicio = caminoAgenteCaja.getLast();
-       
+
         LinkedList<Nodo> caminoNuevo = new LinkedList<>();
-       // caja.setArea(mapa.getCajas().getFirst().getArea());
-     //   caminoNuevo.add(new  Nodo(caja));
-      // caminoNuevo.getFirst().setArea(caja.getArea());
+        // caja.setArea(mapa.getCajas().getFirst().getArea());
+        //   caminoNuevo.add(new  Nodo(caja));
+        // caminoNuevo.getFirst().setArea(caja.getArea());
         for (int i = 0; i < caminoCajaMarcador.size(); i++) {
             if (diagonal(auxNodoInicio, caminoCajaMarcador.get(i))) {
-                LinkedList<Nodo> auxCamino = aEstrella1.ejecutar(auxNodoInicio, caminoCajaMarcador.get(i), mapa);
+                LinkedList<Nodo> auxCamino = aEstrella.ejecutar(auxNodoInicio, caminoCajaMarcador.get(i), mapa);
                 caminoNuevo.addAll(auxCamino);
-                
+
             }
             caminoNuevo.add(caminoCajaMarcador.get(i));
             caminoNuevo.getLast().setArea(caminoCajaMarcador.get(i).getArea());
@@ -214,7 +214,7 @@ public class MapaUI extends javax.swing.JFrame {
                 || (nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() - 1 == nodo2.getJ())
                 || (nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() - 1 == nodo2.getJ())
                 || (nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() + 1 == nodo2.getJ())) {
-            
+
             return true;
         }
         return false;

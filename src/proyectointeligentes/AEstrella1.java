@@ -11,14 +11,14 @@ import java.util.LinkedList;
  *
  * @author JORGE_ALEJANDRO
  */
-public class AEstrella {
+public class AEstrella1 {
 
     private Nodo inicio;
     private Nodo fin;
     private LinkedList<Nodo> abierta;
     private LinkedList<Nodo> cerrada;
 
-    public AEstrella() {
+    public AEstrella1() {
         inicio = null;
         fin = null;
         abierta = new LinkedList<>();
@@ -113,64 +113,39 @@ public class AEstrella {
         return reversa;
     }
 
-    public Nodo nodoOpuesto(Nodo nodo1, Nodo nodo2, Mapa mapa) {
-        Nodo nodo3 = null;
-        if (nodo1.getI() - 1 >= 0 && nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() - 1][nodo1.getJ()]);
-        } else if (nodo1.getI() + 1 < mapa.getN() && nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() + 1][nodo1.getJ()]);
-        } else if (nodo1.getJ() - 1 >= 0 && nodo1.getJ() + 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() - 1]);
-        } else if (nodo1.getJ() + 1 < mapa.getN() && nodo1.getJ() - 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() + 1]);
-        }
-        return nodo3;
-    }
-
     public LinkedList<Nodo> vecinos(Nodo posicion, Mapa mapa) {
         LinkedList<Nodo> vecinos = new LinkedList<>();
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Muro)) {
         if (posicion.getI() + 1 < mapa.getN() && !(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Muro) && !(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()] instanceof Caja)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI() + 1][posicion.getJ()]);
-            Nodo nodoAux = nodoOpuesto(posicion, vecino, mapa);
-            if (nodoAux != null && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Muro) && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Caja)) {
-                vecino.setPadre(posicion);
-                vecino.distancias(fin);
-                vecinos.add(vecino);
-                System.out.println("proyectointeligentes.AEstrella.vecinos()");
-            } else {
-                //System.out.println("No es vecino");
-            }
+            vecino.setPadre(posicion);
+            vecino.distancias(fin);
+            vecinos.add(vecino);
+
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) &&!(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Muro)) {
         if (posicion.getI() - 1 >= 0 && !(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Muro) && !(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()] instanceof Caja)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI() - 1][posicion.getJ()]);
-            Nodo nodoAux = nodoOpuesto(posicion, vecino, mapa);
-            if (nodoAux != null && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Muro) && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Caja)) {
-                vecino.setPadre(posicion);
-                vecino.distancias(fin);
-                vecinos.add(vecino);
-            }
+            vecino.setPadre(posicion);
+            vecino.distancias(fin);
+            vecinos.add(vecino);
+
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Muro)) {
         if (posicion.getJ() + 1 < mapa.getN() && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Muro) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1] instanceof Caja)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI()][posicion.getJ() + 1]);
-            Nodo nodoAux = nodoOpuesto(posicion, vecino, mapa);
-            if (nodoAux != null && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Muro) && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Caja)) {
-                vecino.setPadre(posicion);
-                vecino.distancias(fin);
-                vecinos.add(vecino);
-            }
+            vecino.setPadre(posicion);
+            vecino.distancias(fin);
+            vecinos.add(vecino);
+
         }
 //        if (limites(posicion.getI() + 1, mapa) && limites(posicion.getJ(), mapa) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Muro)) {
         if (posicion.getJ() - 1 >= 0 && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Muro) && !(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1] instanceof Caja)) {
             Nodo vecino = new Nodo(mapa.getMapaM()[posicion.getI()][posicion.getJ() - 1]);
-            Nodo nodoAux = nodoOpuesto(posicion, vecino, mapa);
-            if (nodoAux != null && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Muro) && !(mapa.getMapaM()[nodoAux.getI()][nodoAux.getJ()] instanceof Caja)) {
-                vecino.setPadre(posicion);
-                vecino.distancias(fin);
-                vecinos.add(vecino);
-            }
+            vecino.setPadre(posicion);
+            vecino.distancias(fin);
+            vecinos.add(vecino);
+
         }
 
         return vecinos;
