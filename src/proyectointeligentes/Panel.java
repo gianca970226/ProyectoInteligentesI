@@ -33,8 +33,8 @@ public class Panel extends javax.swing.JPanel {
 
     public Panel() {
         initComponents();
-        cajaMovimiento=null;
-        agenteMovimiento=null;
+        cajaMovimiento = null;
+        agenteMovimiento = null;
     }
 
     /**
@@ -108,20 +108,20 @@ public class Panel extends javax.swing.JPanel {
             int i = evt.getY() / mapa.getAltoCuadro();
             int j = evt.getX() / mapa.getAnchoCuadro();
             //Se obtiene el item
-            Cuadro auxItemSeleccionado=itemSeleccionado;
+            Cuadro auxItemSeleccionado = itemSeleccionado;
             //Se le setea su area
             Rectangle area = new Rectangle(evt.getX(), evt.getY(), mapa.getAnchoCuadro(), mapa.getAltoCuadro());
             auxItemSeleccionado.setArea(area);
             auxItemSeleccionado.setI(i);
             auxItemSeleccionado.setJ(j);
             //Se almacena en la matriz
-            mapa.getMapaM()[i][j]=auxItemSeleccionado;
+            mapa.getMapaM()[i][j] = auxItemSeleccionado;
         }
         repaint();
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        
+
     }//GEN-LAST:event_formMouseClicked
 
     @Override
@@ -134,17 +134,17 @@ public class Panel extends javax.swing.JPanel {
             g.setColor(Color.BLACK);
             g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa());
             pintarItems(g);
-            
+
             g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa());
             pintarMapa(g);
-            if (cajaMovimiento!=null) {
+            /*if (cajaMovimiento!=null) {
                 g.drawImage(new ImageIcon(getClass().getResource(cajaMovimiento.getRutaImagen())).getImage(), (int) cajaMovimiento.getArea().getX(), (int) cajaMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
             }
             if (agenteMovimiento!=null) {
                 g.drawImage(new ImageIcon(getClass().getResource(agenteMovimiento.getRutaImagen())).getImage(), (int) agenteMovimiento.getArea().getX(), (int) agenteMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
             }
-            
-            
+             */
+
             //pinta la anamiacion de colocar imagen en el tablero
             //El 0 es el X1 de la ciudad.
             if (banderaSeleccionado && xItemSeleccionado > 0 && xItemSeleccionado < mapa.getAnchoMapa() && yItemSeleccionado > 0 && yItemSeleccionado < mapa.getAltoMapa()) {
@@ -153,7 +153,7 @@ public class Panel extends javax.swing.JPanel {
                 int j = xItemSeleccionado / mapa.getAnchoCuadro();
                 g.drawRect(j * mapa.getAnchoCuadro(), i * mapa.getAltoCuadro(), mapa.getAnchoCuadro(), mapa.getAltoCuadro());
             }
-            
+
         }
     }
 
@@ -162,7 +162,7 @@ public class Panel extends javax.swing.JPanel {
             g.drawImage(new ImageIcon(getClass().getResource(areaItems.getItems().get(i).getRutaImagen())).getImage(), areaItems.getItems().get(i).getArea().x, areaItems.getItems().get(i).getArea().y, areaItems.getItems().get(i).getArea().width, areaItems.getItems().get(i).getArea().height, this);
         }
     }
-    
+
     /**
      * Permite en recorrer la matriz de componentes y pintar las difrentes
      * imagenes asociadas ala posicion de la matriz en caso de que sea null es
@@ -213,13 +213,7 @@ public class Panel extends javax.swing.JPanel {
         this.agenteMovimiento = agenteMovimiento;
     }
 
-    
 
-    
-    
-    
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

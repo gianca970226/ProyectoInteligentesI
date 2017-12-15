@@ -1,0 +1,16 @@
+15
+cuadro,cuadro,muro,muro,muro,muro,muro,muro,muro,muro,muro,muro,cuadro,cuadro,marcador
+cuadro,agente,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,marcador
+cuadro,cuadro,muro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,caja,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,muro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,muro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,muro,muro,muro,muro,muro,muro,muro,muro,muro,muro,cuadro,cuadro,cuadro
+cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro
+cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,caja,cuadro,cuadro,cuadro,cuadro
+cuadro,cuadro,caja,cuadro,cuadro,cuadro,agente,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro
+cuadro,agente,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,cuadro,marcador
