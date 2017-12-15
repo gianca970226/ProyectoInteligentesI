@@ -147,26 +147,30 @@ public class MapaUI extends javax.swing.JFrame {
 
     private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
         mapa.EncontrarItems();
-        AEstrella aEstrella1 = new AEstrella(); //Hago objeto de algoritmo estrella
-        AEstrella1 aEstrella = new AEstrella1();
+        AEstrella aEstrella = new AEstrella(); //Hago objeto de algoritmo estrella
+        AEstrella1 aEstrella1 = new AEstrella1();
 //        aEstrella1.cargarInicioFinAgenteCaja(mapa); //Cargo los nodos posiciones del agente y la caja
         // int inicioI = ; //Obtengo las posiciones del nodo inicio que es el agente 
         // int inicioJ = aEstrella1.getInicio().getJ();
         Agente agente = (Agente) mapa.getAgentes().getFirst().clone();
+
+        Rectangle area = mapa.getMapaM()[agente.getI()][agente.getJ()].getArea();
+        mapa.getMapaM()[agente.getI()][agente.getJ()] = new Cuadro(agente.getI(), agente.getJ()); //Hago un cuadro blanco en esa posicion
+        mapa.getMapaM()[agente.getI()][agente.getJ()].setArea(area);
         panel1.setAgenteMovimiento(agente); //Seteo el agente en el panel
         agente.setMapa(mapa); //seteo el mapa en el agente
         agente.setPanel(panel1); //Seteo el panel en el agente
-        mapa.getMapaM()[agente.getI()][agente.getJ()] = new Cuadro(agente.getI(), agente.getJ()); //Hago un cuadro blanco en esa posicion
+
         //HASTA AQUI EL AGENTE HAY QUE MODIFICARLE EL CAMINO
         Nodo nodeCaja = new Nodo(mapa.getCajas().getFirst());
         Nodo nodeMarcador = new Nodo(mapa.getMarcadores().getFirst());
         Nodo nodeAgente = new Nodo(mapa.getAgentes().getFirst());
         //aEstrella2.cargarInicioFinCajaMarcador(mapa, aEstrella1.getFin()); //Cargo desde los nodos inicio y fin caja y marcador
-        LinkedList<Nodo> caminoCajaMarcador = aEstrella1.ejecutar(nodeCaja, nodeMarcador, mapa); //Obtengo ese camino
+        LinkedList<Nodo> caminoCajaMarcador = aEstrella.ejecutar(nodeCaja, nodeMarcador, mapa); //Obtengo ese camino
         Nodo cuadrar = caminoCajaMarcador.getFirst(); //Como hay que cambiar el nodo fin del agente a la caja entonces tomo el primer nodo camino de la caja
         //inicioI=aEstrella2.getInicio().getI();
         //inicioJ=aEstrella2.getInicio().getJ();
-        Caja caja = (Caja) mapa.getCajas().getFirst().clone(); //Tomo la caja seleccionada
+        Caja caja = (Caja) mapa.getCajas().getFirst().clone(); //Tomo la caja seleccion
         Nodo finAgente = null; //Nodo para cambiar el nodo fin al agente
         if (caja.getI() + 1 == cuadrar.getI() && caja.getJ() == cuadrar.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
             finAgente = new Nodo(mapa.getMapaM()[caja.getI() - 1][caja.getJ()]);
@@ -178,25 +182,45 @@ public class MapaUI extends javax.swing.JFrame {
             finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ() + 1]);
         }
         //aEstrella1.actualizarFin(finAgente); //Le actualizo el fin al primer algoritmo a estrella
-        LinkedList<Nodo> caminoAgenteCaja = aEstrella.ejecutar(nodeAgente, finAgente, mapa); //Obtengo el camino del agente
+        LinkedList<Nodo> caminoAgenteCaja = aEstrella1.ejecutar(nodeAgente, finAgente, mapa); //Obtengo el camino del agente
+        caminoAgenteCaja.add(new Nodo(caja));
         agente.setCamino1(caminoAgenteCaja); //Seteo el primer camino al agente
         Nodo auxNodoInicio = caminoAgenteCaja.getLast();
-
         LinkedList<Nodo> caminoNuevo = new LinkedList<>();
         // caja.setArea(mapa.getCajas().getFirst().getArea());
         //   caminoNuevo.add(new  Nodo(caja));
         // caminoNuevo.getFirst().setArea(caja.getArea());
-        for (int i = 0; i < caminoCajaMarcador.size(); i++) {
-            if (diagonal(auxNodoInicio, caminoCajaMarcador.get(i))) {
-                LinkedList<Nodo> auxCamino = aEstrella.ejecutar(auxNodoInicio, caminoCajaMarcador.get(i), mapa);
-                caminoNuevo.addAll(auxCamino);
-
+        Cuadro[][] auxMapaCuadro = new Cuadro[mapa.getN()][mapa.getN()];
+        for (int i = 0; i < mapa.getN(); i++) {
+            for (int j = 0; j < mapa.getN(); j++) {
+                auxMapaCuadro[i][j] = (Cuadro) mapa.getMapaM()[i][j].clone();
             }
-            caminoNuevo.add(caminoCajaMarcador.get(i));
-            caminoNuevo.getLast().setArea(caminoCajaMarcador.get(i).getArea());
-            auxNodoInicio = caminoCajaMarcador.get(i);
         }
+        Mapa auxMapa = new Mapa(auxMapaCuadro, mapa.getN(), -1, -1, -1, -1);
+        Agente auxAgente = (Agente) agente.clone();
+        Caja auxCaja = (Caja) caja.clone();
+        for (int i = 0; i < caminoCajaMarcador.size() - 1; i++) {
+            auxMapa.getMapaM()[caminoCajaMarcador.get(i).getI()][caminoCajaMarcador.get(i).getJ()] = auxCaja;
+            auxMapa.getMapaM()[auxCaja.getI()][auxCaja.getJ()] = new Cuadro(auxCaja.getI(), auxCaja.getJ());
+            auxCaja.setI(caminoCajaMarcador.get(i).getI());
+            auxCaja.setJ(caminoCajaMarcador.get(i).getJ());
+            Nodo nodoOpuesto = nodoOpuesto(caminoCajaMarcador.get(i), caminoCajaMarcador.get(i + 1), auxMapa);
+            if (diagonal(auxNodoInicio, nodoOpuesto)) {
+                LinkedList<Nodo> auxCamino = aEstrella1.ejecutar(new Nodo(auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()]), new Nodo(auxMapa.getMapaM()[nodoOpuesto.getI()][nodoOpuesto.getJ()]), auxMapa);
+                caminoNuevo.addAll(auxCamino);
+                caminoNuevo.add(caminoCajaMarcador.get(i));
+                //caminoNuevo.add(caminoCajaMarcador.get(i+1));
+            } else {
+                caminoNuevo.add(caminoCajaMarcador.get(i));
+            }
 
+            auxNodoInicio = caminoNuevo.getLast();
+            auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()] = auxAgente;
+            auxMapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()] = new Cuadro(agente.getI(), agente.getJ());
+            auxAgente.setI(auxNodoInicio.getI());
+            auxAgente.setJ(auxNodoInicio.getJ());
+
+        }
         agente.setCamino2(caminoNuevo); //Luego el segundo camino
 //        agente.setCajaAsignada(caja); //La caja que debe mover
         panel1.setCajaMovimiento(caja); //Le doy la caja al panel para que lo pinte
@@ -209,6 +233,20 @@ public class MapaUI extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_ejecutarJuegoActionPerformed
+    public Nodo nodoOpuesto(Nodo nodo1, Nodo nodo2, Mapa mapa) {
+        Nodo nodo3 = null;
+        if (nodo1.getI() - 1 >= 0 && nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
+            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() - 1][nodo1.getJ()]);
+        } else if (nodo1.getI() + 1 < mapa.getN() && nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) {
+            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() + 1][nodo1.getJ()]);
+        } else if (nodo1.getJ() - 1 >= 0 && nodo1.getJ() + 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
+            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() - 1]);
+        } else if (nodo1.getJ() + 1 < mapa.getN() && nodo1.getJ() - 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
+            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() + 1]);
+        }
+        return nodo3;
+    }
+
     private boolean diagonal(Nodo nodo1, Nodo nodo2) {
         if ((nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() + 1 == nodo2.getJ())
                 || (nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() - 1 == nodo2.getJ())

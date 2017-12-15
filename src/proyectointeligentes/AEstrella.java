@@ -137,7 +137,6 @@ public class AEstrella {
                 vecino.setPadre(posicion);
                 vecino.distancias(fin);
                 vecinos.add(vecino);
-                System.out.println("proyectointeligentes.AEstrella.vecinos()");
             } else {
                 //System.out.println("No es vecino");
             }
@@ -234,9 +233,6 @@ public class AEstrella {
                     }
                 }
             }
-        }
-        if (abierta.isEmpty()) {
-            System.out.println("");
         }
     }
 

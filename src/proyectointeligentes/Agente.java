@@ -5,13 +5,14 @@
  */
 package proyectointeligentes;
 
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class Agente extends Cuadro implements Runnable{
+public class Agente extends Cuadro implements Runnable {
 
     private boolean asignado;
     private Panel panel;
@@ -29,9 +30,9 @@ public class Agente extends Cuadro implements Runnable{
         panel = null;
         mapa = null;
 //        cajaAsignada=null;
-        
+
     }
-    
+
     public void start() {
         this.hilo = new Thread(this);
         this.hilo.start();
@@ -44,7 +45,7 @@ public class Agente extends Cuadro implements Runnable{
     public void setAsignado(boolean asignado) {
         this.asignado = asignado;
     }
-    
+
     public LinkedList<Nodo> getCamino1() {
         return camino1;
     }
@@ -60,8 +61,6 @@ public class Agente extends Cuadro implements Runnable{
     public void setCamino2(LinkedList<Nodo> camino2) {
         this.camino2 = camino2;
     }
-    
-    
 
     public Mapa getMapa() {
         return mapa;
@@ -86,11 +85,9 @@ public class Agente extends Cuadro implements Runnable{
 //    public void setCajaAsignada(Caja cajaAsignada) {
 //        this.cajaAsignada = cajaAsignada;
 //    }
-    
-    
-    
     @Override
     public void run() {
+
         while (!camino1.isEmpty()) {
             Nodo nodo = camino1.getFirst();
             Cuadro siguiente = mapa.getMapaM()[nodo.getI()][nodo.getJ()];
@@ -103,13 +100,14 @@ public class Agente extends Cuadro implements Runnable{
             panel.repaint();
             camino1.removeFirst();
         }
-        Nodo fin=camino2.getLast();
-        mapa.getMapaM()[panel.getCajaMovimiento().getI()][panel.getCajaMovimiento().getJ()]= new Cuadro(panel.getCajaMovimiento().getI(), panel.getCajaMovimiento().getJ());
+        Nodo fin = camino2.getLast();
+        mapa.getMapaM()[panel.getCajaMovimiento().getI()][panel.getCajaMovimiento().getJ()] = new Cuadro(panel.getCajaMovimiento().getI(), panel.getCajaMovimiento().getJ());
         while (!camino2.isEmpty()) {
             Nodo nodo = camino2.getFirst();
             Cuadro siguiente = mapa.getMapaM()[nodo.getI()][nodo.getJ()];
-            getArea().setLocation((int) panel.getCajaMovimiento().getArea().getX(), (int) panel.getCajaMovimiento().getArea().getY());
-            panel.getCajaMovimiento().getArea().setLocation((int)siguiente.getArea().getX(), (int)siguiente.getArea().getY());
+            getArea().setLocation((int) siguiente.getArea().getX(), (int) siguiente.getArea().getY());
+            //getArea().setLocation((int) panel.getCajaMovimiento().getArea().getX(), (int) panel.getCajaMovimiento().getArea().getY());
+            // panel.getCajaMovimiento().getArea().setLocation((int)siguiente.getArea().getX(), (int)siguiente.getArea().getY());
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
