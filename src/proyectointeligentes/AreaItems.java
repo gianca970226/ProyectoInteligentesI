@@ -6,13 +6,14 @@
 package proyectointeligentes;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class AreaItems {
+public class AreaItems{
     private ArrayList<Cuadro>items;    
     private int anchoItemsX1;
     private int anchoItemsX2;

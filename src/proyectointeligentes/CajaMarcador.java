@@ -5,11 +5,13 @@
  */
 package proyectointeligentes;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class CajaMarcador extends Cuadro{
+public class CajaMarcador extends Cuadro implements Serializable{
     
     
     public CajaMarcador(int i, int j) {

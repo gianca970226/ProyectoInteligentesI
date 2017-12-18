@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
@@ -28,13 +29,9 @@ public class Panel extends javax.swing.JPanel {
     private Cuadro itemSeleccionado;
     private int xItemSeleccionado;
     private int yItemSeleccionado;
-    private Caja cajaMovimiento;
-    private Agente agenteMovimiento;
 
     public Panel() {
         initComponents();
-        cajaMovimiento = null;
-        agenteMovimiento = null;
     }
 
     /**
@@ -134,19 +131,8 @@ public class Panel extends javax.swing.JPanel {
             g.setColor(Color.BLACK);
             g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa());
             pintarItems(g);
-
-            g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa());
+            g.drawRect(0, 0, mapa.getAnchoMapa(), mapa.getAltoMapa()); //Para separarlo de los items movibles
             pintarMapa(g);
-            /*if (cajaMovimiento!=null) {
-                g.drawImage(new ImageIcon(getClass().getResource(cajaMovimiento.getRutaImagen())).getImage(), (int) cajaMovimiento.getArea().getX(), (int) cajaMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
-            }
-            if (agenteMovimiento!=null) {
-                g.drawImage(new ImageIcon(getClass().getResource(agenteMovimiento.getRutaImagen())).getImage(), (int) agenteMovimiento.getArea().getX(), (int) agenteMovimiento.getArea().getY(), (int) (mapa.getAnchoCuadro()), mapa.getAltoCuadro(), this);
-            }
-             */
-
-            //pinta la anamiacion de colocar imagen en el tablero
-            //El 0 es el X1 de la ciudad.
             if (banderaSeleccionado && xItemSeleccionado > 0 && xItemSeleccionado < mapa.getAnchoMapa() && yItemSeleccionado > 0 && yItemSeleccionado < mapa.getAltoMapa()) {
                 g.drawImage(new ImageIcon(getClass().getResource(itemSeleccionado.getRutaImagen())).getImage(), xItemSeleccionado, yItemSeleccionado, 100, 100, this);
                 int i = yItemSeleccionado / mapa.getAltoCuadro();
@@ -195,22 +181,6 @@ public class Panel extends javax.swing.JPanel {
 
     public AreaItems getAreaItems() {
         return areaItems;
-    }
-
-    public Caja getCajaMovimiento() {
-        return cajaMovimiento;
-    }
-
-    public void setCajaMovimiento(Caja cajaMovimiento) {
-        this.cajaMovimiento = cajaMovimiento;
-    }
-
-    public Agente getAgenteMovimiento() {
-        return agenteMovimiento;
-    }
-
-    public void setAgenteMovimiento(Agente agenteMovimiento) {
-        this.agenteMovimiento = agenteMovimiento;
     }
 
 

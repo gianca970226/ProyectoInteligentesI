@@ -7,8 +7,6 @@ package proyectointeligentes;
 
 import java.awt.Rectangle;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,18 +18,15 @@ public class Agente extends Cuadro implements Runnable {
     private Panel panel;
     private Mapa mapa;
     private LinkedList<Nodo> camino;
-
-//    private Caja cajaAsignada;
-    private Thread hilo;
+    private boolean colision;
 
     public Agente(int i, int j) {
         super(i, j);
         setRutaImagen("img/agente.png");
-//        setTipo("agente");
         asignado = false;
         panel = null;
         mapa = null;
-//        cajaAsignada=null;
+        colision=false;
 
     }
 
@@ -73,54 +68,78 @@ public class Agente extends Cuadro implements Runnable {
         this.panel = panel;
     }
 
-//    public Caja getCajaAsignada() {
-//        return cajaAsignada;
-//    }
-//
-//    public void setCajaAsignada(Caja cajaAsignada) {
-//        this.cajaAsignada = cajaAsignada;
-//    }
-    public void tipoMovimiento(Nodo caja, Nodo agente) {
-        if (agente.getJ() + 1 < mapa.getN() && agente.getI() == caja.getI() && agente.getJ() + 1 == caja.getJ()) {
-            this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ() + 1] = this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ()];
-        } else if (agente.getJ() - 1 >= 0 && agente.getI() == caja.getI() && agente.getJ() - 1 == caja.getJ()) {
-            this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ() - 1] = this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ()];
-        } else if (agente.getI() - 1 >= 0 && agente.getJ() == caja.getJ() && agente.getI() - 1 == caja.getI()) {
-            this.panel.getMapa().getMapaM()[caja.getI() - 1][caja.getJ()] = this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ()];
-        } else if (agente.getI() + 1 < mapa.getN() && agente.getJ() == caja.getJ() && agente.getI() + 1 == caja.getI()) {
-            this.panel.getMapa().getMapaM()[caja.getI() + 1][caja.getJ()] = this.panel.getMapa().getMapaM()[caja.getI()][caja.getJ()];
-        }
+    public boolean isColision() {
+        return colision;
     }
 
-    public void inicarAnimaccion() {
-        for (int i = 0; i < this.camino.size(); i++) {
-            Agente auxAgente = this;
-            if (this.panel.getMapa().getMapaM()[this.camino.get(i).getI()][this.camino.get(i).getJ()] instanceof Caja) {
+    public void setColision(boolean colision) {
+        this.colision = colision;
+    }
+    
 
-                tipoMovimiento(camino.get(i), new Nodo(this));
-
-                // this.panel.getMapa().getMapaM()[this.camino.get(i).getI()][this.camino.get(i).getJ() - 1] = this.panel.getMapa().getMapaM()[this.camino.get(i).getI()][this.camino.get(i).getJ()];
+    public void tipoMovimiento(Nodo caja, Nodo agente) {
+        if (agente.getJ() + 1 < mapa.getN() && agente.getI() == caja.getI() && agente.getJ() + 1 == caja.getJ()) {
+            if (mapa.getMapaM()[caja.getI()][caja.getJ() + 1] instanceof Agente || mapa.getMapaM()[caja.getI()][caja.getJ() + 1] instanceof Caja) {
+                colision = true;
+            } else {
+                mapa.getMapaM()[caja.getI()][caja.getJ() + 1] = mapa.getMapaM()[caja.getI()][caja.getJ()];
+                mapa.getMapaM()[caja.getI()][caja.getJ() + 1].setI(caja.getI());
+                mapa.getMapaM()[caja.getI()][caja.getJ() + 1].setJ(caja.getJ() + 1);
             }
-            this.panel.getMapa().getMapaM()[this.camino.get(i).getI()][this.camino.get(i).getJ()] = auxAgente;
-            Rectangle area = mapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()].getArea();
-            mapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()] = new Cuadro(auxAgente.getI(), auxAgente.getJ()); //Hago un cuadro blanco en esa posicion
-            mapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()].setArea(area);
-            auxAgente.setI(camino.get(i).getI());
-            auxAgente.setJ(camino.get(i).getJ());
 
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+        } else if (agente.getJ() - 1 >= 0 && agente.getI() == caja.getI() && agente.getJ() - 1 == caja.getJ()) {
+            if (mapa.getMapaM()[caja.getI()][caja.getJ() - 1] instanceof Agente || mapa.getMapaM()[caja.getI()][caja.getJ() - 1] instanceof Caja) {
+                colision = true;
+            } else {
+                mapa.getMapaM()[caja.getI()][caja.getJ() - 1] = mapa.getMapaM()[caja.getI()][caja.getJ()];
+                mapa.getMapaM()[caja.getI()][caja.getJ() - 1].setI(caja.getI());
+                mapa.getMapaM()[caja.getI()][caja.getJ() - 1].setJ(caja.getJ() - 1);
             }
-            panel.repaint();
+
+        } else if (agente.getI() - 1 >= 0 && agente.getJ() == caja.getJ() && agente.getI() - 1 == caja.getI()) {
+            if (mapa.getMapaM()[caja.getI() - 1][caja.getJ()] instanceof Agente || mapa.getMapaM()[caja.getI() - 1][caja.getJ()] instanceof Caja) {
+                colision = true;
+            } else {
+                mapa.getMapaM()[caja.getI() - 1][caja.getJ()] = mapa.getMapaM()[caja.getI()][caja.getJ()];
+                mapa.getMapaM()[caja.getI() - 1][caja.getJ()].setI(caja.getI() - 1);
+                mapa.getMapaM()[caja.getI() - 1][caja.getJ()].setJ(caja.getJ());
+            }
+
+        } else if (agente.getI() + 1 < mapa.getN() && agente.getJ() == caja.getJ() && agente.getI() + 1 == caja.getI()) {
+            if (mapa.getMapaM()[caja.getI() + 1][caja.getJ()] instanceof Agente || mapa.getMapaM()[caja.getI() + 1][caja.getJ()] instanceof Caja) {
+                colision = true;
+            } else {
+                mapa.getMapaM()[caja.getI() + 1][caja.getJ()] = mapa.getMapaM()[caja.getI()][caja.getJ()];
+                mapa.getMapaM()[caja.getI() + 1][caja.getJ()].setI(caja.getI() + 1);
+                mapa.getMapaM()[caja.getI() + 1][caja.getJ()].setJ(caja.getJ());
+            }
+
         }
     }
 
     @Override
     public void run() {
-
-        inicarAnimaccion();
+        colision = false;
+        for (int i = 0; i < camino.size() && !colision; i++) {
+            if (mapa.getMapaM()[camino.get(i).getI()][camino.get(i).getJ()] instanceof Caja) {
+                tipoMovimiento(camino.get(i), new Nodo(this));
+            }
+            if (!colision) {
+                mapa.getMapaM()[camino.get(i).getI()][camino.get(i).getJ()] = this;
+                Rectangle area = getArea();
+                mapa.getMapaM()[getI()][getJ()] = new Cuadro(getI(), getJ()); //Hago un cuadro blanco en esa posicion
+                mapa.getMapaM()[getI()][getJ()].setArea(area);
+                setI(camino.get(i).getI());
+                setJ(camino.get(i).getJ());
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) {
+                    System.out.println("Error en el hilo");
+                }
+            }
+            panel.repaint();
+        }
+        camino=new LinkedList<>();
     }
 
 }

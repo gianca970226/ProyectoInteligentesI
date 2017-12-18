@@ -5,14 +5,16 @@
  */
 package proyectointeligentes;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class Mapa {
-    private Cuadro [][] mapaM;
+public class Mapa implements Serializable{
+
+    private Cuadro[][] mapaM;
     private int n;//indica la canidad de columnas 
     private int anchoCuadro;//indica el ancho del rectangulo de representacion de un componente
     private int altoCuadro;//indica el alto del rectangulo de representacion de un componente
@@ -29,29 +31,64 @@ public class Mapa {
         this.altoCuadro = altoCuadro;
         this.anchoMapa = anchoMapa;
         this.altoMapa = altoMapa;
-        this.agentes= new LinkedList<>();
-        this.marcadores= new LinkedList<>();
-        this.cajas=new LinkedList<>();
+        this.agentes = new LinkedList<>();
+        this.marcadores = new LinkedList<>();
+        this.cajas = new LinkedList<>();
     }
-    public void EncontrarItems()
-    {
+
+    public void EncontrarACM(Panel panel) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if(this.mapaM[i][j] instanceof Agente)
-                {
-                    agentes.add((Agente) this.mapaM[i][j]);
+                if (mapaM[i][j] instanceof Agente) {
+                    Agente agente=(Agente) mapaM[i][j];
+                    agente.setMapa(this);
+                    agente.setPanel(panel);
+                    agentes.add((Agente) mapaM[i][j]);
                 }
-                 if(this.mapaM[i][j] instanceof Caja)
-                {
-                    cajas.add((Caja) this.mapaM[i][j]);
+                if (this.mapaM[i][j] instanceof Caja) {
+                    cajas.add((Caja) mapaM[i][j]);
                 }
-                  if(this.mapaM[i][j] instanceof Marcador)
-                {
-                    marcadores.add((Marcador) this.mapaM[i][j]);
+                if (this.mapaM[i][j] instanceof Marcador) {
+                    marcadores.add((Marcador) mapaM[i][j]);
                 }
             }
         }
     }
+
+    public Mapa clonarMapa() {
+        Cuadro[][] auxMapaM = new Cuadro[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                auxMapaM[i][j] = (Cuadro) mapaM[i][j].clone();
+            }
+        }
+        Mapa auxMapa = new Mapa(auxMapaM, n, anchoCuadro, altoCuadro, anchoMapa, altoMapa);
+        return auxMapa;
+    }
+    
+    public Mapa eliminarPanelMapaM()
+    {
+        Cuadro mapaMNuevo[][]=new Cuadro[n][n];
+        for (int i=0; i<n; i++)
+        {
+            for (int j=0; j<n; j++)
+            {
+                if (this.mapaM[i][j] instanceof Agente)
+                {
+                    mapaMNuevo[i][j]=new Agente(i, j);
+                    mapaMNuevo[i][j].setBloqueado(this.mapaM[i][j].isBloqueado());
+                }
+                else
+                {
+                    mapaMNuevo[i][j]=this.mapaM[i][j];
+                }
+                
+            }
+        }
+        Mapa mapaNuevo=new Mapa(mapaMNuevo, n, anchoCuadro, altoCuadro, anchoMapa, altoMapa);
+        return mapaNuevo;
+    }
+
     /**
      * @return the mapaM
      */
@@ -147,8 +184,5 @@ public class Mapa {
     public LinkedList<Marcador> getMarcadores() {
         return marcadores;
     }
-    
-    
-    
-    
+
 }

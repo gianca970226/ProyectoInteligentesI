@@ -6,19 +6,20 @@
 package proyectointeligentes;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class Cuadro implements Cloneable {
+public class Cuadro implements Serializable, Cloneable {
 
     private int i;
     private int j;
     private Rectangle area;
     private String rutaImagen;
-//    private String tipo;
+    private boolean bloqueado;
     
 
     public Cuadro(int i, int j) {
@@ -26,12 +27,8 @@ public class Cuadro implements Cloneable {
         this.j = j;
         this.area = null;
         this.rutaImagen = "img/cuadro.png";
-//        this.tipo = "cuadro";
-        
+        bloqueado=false;     
     }
-
-    
-
     public Rectangle getArea() {
         return area;
     }
@@ -64,13 +61,14 @@ public class Cuadro implements Cloneable {
         this.rutaImagen = rutaImagen;
     }
 
-//    public String getTipo() {
-//        return tipo;
-//    }
-//
-//    public void setTipo(String tipo) {
-//        this.tipo = tipo;
-//    }
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
+
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+    }
+    
     
 
     public Object clone() {

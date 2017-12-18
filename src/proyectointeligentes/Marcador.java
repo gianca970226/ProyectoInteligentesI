@@ -6,6 +6,7 @@
 package proyectointeligentes;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 
 /**
  *

@@ -5,11 +5,13 @@
  */
 package proyectointeligentes;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JORGE_ALEJANDRO
  */
-public class Proyectointeligentes {
+public class Proyectointeligentes implements Serializable {
 
     /**
      * @param args the command line arguments

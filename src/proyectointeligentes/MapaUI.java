@@ -5,10 +5,11 @@
  */
 package proyectointeligentes;
 
+
+import jade.gui.GuiEvent;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
@@ -18,25 +19,28 @@ import javax.swing.JOptionPane;
  */
 public class MapaUI extends javax.swing.JFrame {
 
-    GraphicsDevice grafica;
-    Mapa mapa;
-    AreaItems areaItems;
-    ArrayList<AgenteJADE> agentesJADE;
+    private GraphicsDevice grafica;
+    private Mapa mapa;
+    private AreaItems areaItems;
+    private AgenteEJADE agenteEJADE;
 
     /**
      * Creates new form Menu
      *
-     * @param tamaño del mapa
-     * @param archivo nombre del archivo en donde esta cargado el mapa
+     * @param agenteEJADE
      */
-    public MapaUI(int tamaño, String archivo) {
+    public MapaUI(AgenteEJADE agenteEJADE) {
         initComponents();
+        this.agenteEJADE = agenteEJADE;
         grafica = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         grafica.setFullScreenWindow(this);
         panel1.setFocusable(true);
-        if (archivo == null) {
+        String opcion = JOptionPane.showInputDialog(this, "1. Crear\n2. Cargar", "Mapa", JOptionPane.INFORMATION_MESSAGE);
+        if (opcion.equals("1")) {
+            int tamaño = Integer.parseInt(JOptionPane.showInputDialog(this, "Tamaño del mapa", "Cargar Mapa", JOptionPane.INFORMATION_MESSAGE));
             crearMapa(tamaño);
         } else {
+            String archivo = JOptionPane.showInputDialog(this, "Nombre del archivo", "Mapa", JOptionPane.INFORMATION_MESSAGE);
             Util util = new Util();
             mapa = util.cargarMapa(this.getWidth(), this.getHeight(), archivo);
         }
@@ -144,59 +148,35 @@ public class MapaUI extends javax.swing.JFrame {
         util.GuardarMapa(mapa, archivo);
         JOptionPane.showMessageDialog(this, "Guardado con exito el mapa", "Exito al guardar mapa", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_guardarCiudadBotonActionPerformed
-    public void limpiarCajas(Mapa mapa) {
-    }
-    private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
-        mapa.EncontrarItems();
-        LinkedList<Agente> agentes = new LinkedList<>();
 
-//        aEstrella1.cargarInicioFinAgenteCaja(mapa); //Cargo los nodos posiciones del agente y la caja
-        // int inicioI = ; //Obtengo las posiciones del nodo inicio que es el agente 
-        // int inicioJ = aEstrella1.getInicio().getJ();
+    private void ejecutarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarJuegoActionPerformed
+        mapa.EncontrarACM(panel1);
+        GuiEvent ge = new GuiEvent(agenteEJADE, 1);
+        agenteEJADE.postGuiEvent(ge);
+//        ejecutarJuego();
+    }//GEN-LAST:event_ejecutarJuegoActionPerformed
+
+
+    public void ejecutarJuego() {
+        mapa.EncontrarACM(panel1);
+        LinkedList<Agente> agentes = new LinkedList<>();
         for (int x = 0; x < mapa.getAgentes().size(); x++) {
-            AEstrella aEstrella = new AEstrella(); //Hago objeto de algoritmo estrella
-            AEstrella1 aEstrella1 = new AEstrella1();
-            Agente agente = (Agente) mapa.getAgentes().get(x).clone();
-            panel1.setAgenteMovimiento(agente); //Seteo el agente en el panel
-            agente.setMapa(mapa); //seteo el mapa en el agente
-            agente.setPanel(panel1); //Seteo el panel en el agente
-            //HASTA AQUI EL AGENTE HAY QUE MODIFICARLE EL CAMINO
-            Nodo nodeCaja = new Nodo(mapa.getCajas().get(x));
-            Nodo nodeMarcador = new Nodo(mapa.getMarcadores().get(x));
-            Nodo nodeAgente = new Nodo(mapa.getAgentes().get(x));
-            //aEstrella2.cargarInicioFinCajaMarcador(mapa, aEstrella1.getFin()); //Cargo desde los nodos inicio y fin caja y marcador
-            LinkedList<Nodo> caminoCajaMarcador = aEstrella.ejecutar(nodeCaja, nodeMarcador, mapa); //Obtengo ese camino
+            Agente agente = mapa.getAgentes().get(x);
+            AEstrellaCM aEstrellaCM = new AEstrellaCM(); //Hago objeto de algoritmo estrella, que mira las acomodaciones para el agente
+            AEstrellaAM aEstrellaAM = new AEstrellaAM();
+            Nodo nodoCaja = new Nodo(mapa.getCajas().get(x));
+            Nodo nodoMarcador = new Nodo(mapa.getMarcadores().get(x));
+            Nodo nodoAgente = new Nodo(mapa.getAgentes().get(x));
+            LinkedList<Nodo> caminoCajaMarcador = aEstrellaCM.ejecutar(nodoCaja, nodoMarcador, mapa); //Obtengo ese camino
             Nodo cuadrar = caminoCajaMarcador.getFirst(); //Como hay que cambiar el nodo fin del agente a la caja entonces tomo el primer nodo camino de la caja
-            //inicioI=aEstrella2.getInicio().getI();
-            //inicioJ=aEstrella2.getInicio().getJ();
-            Caja caja = (Caja) mapa.getCajas().get(x).clone(); //Tomo la caja seleccion
-            Nodo finAgente = null; //Nodo para cambiar el nodo fin al agente
-            if (caja.getI() + 1 == cuadrar.getI() && caja.getJ() == cuadrar.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
-                finAgente = new Nodo(mapa.getMapaM()[caja.getI() - 1][caja.getJ()]);
-            } else if (caja.getI() - 1 == cuadrar.getI() && caja.getJ() == cuadrar.getJ()) {
-                finAgente = new Nodo(mapa.getMapaM()[caja.getI() + 1][caja.getJ()]);
-            } else if (caja.getJ() + 1 == cuadrar.getJ() && caja.getI() == cuadrar.getI()) {
-                finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ() - 1]);
-            } else {
-                finAgente = new Nodo(mapa.getMapaM()[caja.getI()][caja.getJ() + 1]);
-            }
-            //aEstrella1.actualizarFin(finAgente); //Le actualizo el fin al primer algoritmo a estrella
-            limpiarCajas(mapa);
-            LinkedList<Nodo> caminoAgenteCaja = aEstrella1.ejecutar(nodeAgente, finAgente, mapa); //Obtengo el camino del agente
+            Caja caja = (Caja) mapa.getCajas().get(x); //Tomo la caja seleccion
+            Nodo finAgente = aEstrellaAM.actualizarFinAgente(cuadrar, caja, mapa); //Nodo para cambiar el nodo fin al agente
+            LinkedList<Nodo> caminoAgenteCaja = aEstrellaAM.ejecutar(nodoAgente, finAgente, mapa); //Obtengo el camino del agente
             caminoAgenteCaja.add(new Nodo(caja));
             agente.setCamino(caminoAgenteCaja); //Seteo el primer camino al agente
             Nodo auxNodoInicio = caminoAgenteCaja.getLast();
             LinkedList<Nodo> caminoNuevo = new LinkedList<>();
-            // caja.setArea(mapa.getCajas().getFirst().getArea());
-            //   caminoNuevo.add(new  Nodo(caja));
-            // caminoNuevo.getFirst().setArea(caja.getArea());
-            Cuadro[][] auxMapaCuadro = new Cuadro[mapa.getN()][mapa.getN()];
-            for (int i = 0; i < mapa.getN(); i++) {
-                for (int j = 0; j < mapa.getN(); j++) {
-                    auxMapaCuadro[i][j] = (Cuadro) mapa.getMapaM()[i][j].clone();
-                }
-            }
-            Mapa auxMapa = new Mapa(auxMapaCuadro, mapa.getN(), -1, -1, -1, -1);
+            Mapa auxMapa = mapa.clonarMapa();
             Agente auxAgente = (Agente) agente.clone();
             Caja auxCaja = (Caja) caja.clone();
             for (int i = 0; i < caminoCajaMarcador.size() - 1; i++) {
@@ -204,101 +184,67 @@ public class MapaUI extends javax.swing.JFrame {
                 auxMapa.getMapaM()[auxCaja.getI()][auxCaja.getJ()] = new Cuadro(auxCaja.getI(), auxCaja.getJ());
                 auxCaja.setI(caminoCajaMarcador.get(i).getI());
                 auxCaja.setJ(caminoCajaMarcador.get(i).getJ());
-                Nodo nodoOpuesto = nodoOpuesto(caminoCajaMarcador.get(i), caminoCajaMarcador.get(i + 1), auxMapa);
-                if (diagonal(auxNodoInicio, nodoOpuesto)) {
-                    LinkedList<Nodo> auxCamino = aEstrella1.ejecutar(new Nodo(auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()]), new Nodo(auxMapa.getMapaM()[nodoOpuesto.getI()][nodoOpuesto.getJ()]), auxMapa);
+                Nodo nodoOpuesto = aEstrellaAM.nodoOpuesto(caminoCajaMarcador.get(i), caminoCajaMarcador.get(i + 1), auxMapa);
+                if (aEstrellaAM.diagonal(auxNodoInicio, nodoOpuesto)) {
+                    LinkedList<Nodo> auxCamino = aEstrellaAM.ejecutar(new Nodo(auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()]), new Nodo(auxMapa.getMapaM()[nodoOpuesto.getI()][nodoOpuesto.getJ()]), auxMapa);
                     caminoNuevo.addAll(auxCamino);
                     caminoNuevo.add(caminoCajaMarcador.get(i));
-                    //caminoNuevo.add(caminoCajaMarcador.get(i+1));
                 } else {
                     caminoNuevo.add(caminoCajaMarcador.get(i));
                 }
-
                 auxNodoInicio = caminoNuevo.getLast();
                 auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()] = auxAgente;
                 auxMapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()] = new Cuadro(agente.getI(), agente.getJ());
                 auxAgente.setI(auxNodoInicio.getI());
                 auxAgente.setJ(auxNodoInicio.getJ());
-
             }
             agente.getCamino().addAll(caminoNuevo); //Luego el segundo camino
-//        agente.setCajaAsignada(caja); //La caja que debe mover
-            //panel1.setCajaMovimiento(caja); //Le doy la caja al panel para que lo pinte
-            //panel1.setAgenteMovimiento(agente); //le doy el agente al panel para que lo pinte
             agentes.add(agente);
-//        for (int i = 0; i < camino2.size(); i++) {
-//            System.out.println(camino2.get(i).getI() + "-" + camino2.get(i).getJ());
-//        }
-            //panel1.getAgenteMovimiento().start(); //Ejecuto el hilo
-
         }
         for (int i = 0; i < agentes.size(); i++) {
             agentes.get(i).start();
         }
-
-    }//GEN-LAST:event_ejecutarJuegoActionPerformed
-
-    public Nodo nodoOpuesto(Nodo nodo1, Nodo nodo2, Mapa mapa) {
-        Nodo nodo3 = null;
-        if (nodo1.getI() - 1 >= 0 && nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) { //Verificaciones para saber cual es el nodo fin para acomodar el agente
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() - 1][nodo1.getJ()]);
-        } else if (nodo1.getI() + 1 < mapa.getN() && nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() == nodo2.getJ()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI() + 1][nodo1.getJ()]);
-        } else if (nodo1.getJ() - 1 >= 0 && nodo1.getJ() + 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() - 1]);
-        } else if (nodo1.getJ() + 1 < mapa.getN() && nodo1.getJ() - 1 == nodo2.getJ() && nodo1.getI() == nodo2.getI()) {
-            nodo3 = new Nodo(mapa.getMapaM()[nodo1.getI()][nodo1.getJ() + 1]);
-        }
-        return nodo3;
-    }
-
-    private boolean diagonal(Nodo nodo1, Nodo nodo2) {
-        if ((nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() + 1 == nodo2.getJ())
-                || (nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() - 1 == nodo2.getJ())
-                || (nodo1.getI() + 1 == nodo2.getI() && nodo1.getJ() - 1 == nodo2.getJ())
-                || (nodo1.getI() - 1 == nodo2.getI() && nodo1.getJ() + 1 == nodo2.getJ())) {
-
-            return true;
-        }
-        return false;
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MapaUI(0, null).setVisible(true);
-            }
-        });
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MapaUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MapaUI(null).setVisible(true);
+//            }
+//        });
+//    }
+    public Mapa getMapa() {
+        return mapa;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

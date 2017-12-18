@@ -5,7 +5,6 @@
  */
 package proyectointeligentes;
 
-import java.awt.Rectangle;
 
 /**
  *

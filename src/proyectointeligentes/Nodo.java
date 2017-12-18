@@ -5,6 +5,8 @@
  */
 package proyectointeligentes;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JORGE_ALEJANDRO
