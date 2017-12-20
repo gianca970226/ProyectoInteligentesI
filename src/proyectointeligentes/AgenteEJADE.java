@@ -15,8 +15,6 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -80,14 +78,8 @@ public class AgenteEJADE extends GuiAgent {
                     ACLMessage mapaE = new ACLMessage(ACLMessage.REQUEST);
                     mapaE.addReceiver(id);
                     mapaE.setSender(getAID());
-                    mapaE.setContentObject(juego.getMapa().eliminarPanelMapaM());
+                    mapaE.setContentObject(juego.getMapa().eliminarPanelMapaM(juego.getMapa().getAgentes().get(i)));
                     send(mapaE);
-                    
-//                    ACLMessage colisionE = new ACLMessage(ACLMessage.REQUEST);
-//                    colisionE.addReceiver(id);
-//                    colisionE.setSender(getAID());
-//                    colisionE.setContent("false");
-//                    send(colisionE);
 
                     ACLMessage recibirCaminoAgente = blockingReceive();
                     if (recibirCaminoAgente != null) {
@@ -147,8 +139,8 @@ public class AgenteEJADE extends GuiAgent {
 
                         ACLMessage mapaE = new ACLMessage(ACLMessage.REQUEST);
                         mapaE.addReceiver(id);
-                        mapaE.setSender(this.getAgent().getAID());
-                        mapaE.setContentObject(juego.getMapa().eliminarPanelMapaM());
+                        mapaE.setSender(getAID());
+                        mapaE.setContentObject(juego.getMapa().eliminarPanelMapaM(juego.getMapa().getAgentes().get(i)));
                         send(mapaE);
 
                         ACLMessage recibirCaminoAgente = blockingReceive();

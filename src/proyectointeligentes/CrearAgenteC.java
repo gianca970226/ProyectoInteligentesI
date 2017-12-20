@@ -14,14 +14,14 @@ import jade.wrapper.ContainerController;
  *
  * @author Ander
  */
-public class Agent_Master {
+public class CrearAgenteC {
 
     private static ContainerController containerController;
     Runtime runtime;
     private final ProfileImpl profile;
     AgentController Agente;
 
-    public Agent_Master() {
+    public CrearAgenteC() {
         runtime = Runtime.instance();
         profile = new ProfileImpl();
         profile.setParameter(ProfileImpl.MAIN_HOST, "localhost");
