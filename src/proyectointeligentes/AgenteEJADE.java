@@ -15,6 +15,7 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -37,7 +38,7 @@ public class AgenteEJADE extends GuiAgent {
         if (comando == 1) {
             EnviarAsignaciones enviarAsignaciones = new EnviarAsignaciones();
             addBehaviour(enviarAsignaciones);
-            EnviarColisiones enviarColisiones=new EnviarColisiones();
+            EnviarColisiones enviarColisiones = new EnviarColisiones();
             addBehaviour(enviarColisiones);
 //            System.out.println("Lllegue");
         }
@@ -84,8 +85,12 @@ public class AgenteEJADE extends GuiAgent {
                     ACLMessage recibirCaminoAgente = blockingReceive();
                     if (recibirCaminoAgente != null) {
                         LinkedList<Nodo> camino = (LinkedList<Nodo>) recibirCaminoAgente.getContentObject();
-                        juego.getMapa().getAgentes().get(i).setCamino(camino);
-                        juego.getMapa().getAgentes().get(i).start();
+                        if (camino.isEmpty()) {
+                            JOptionPane.showMessageDialog(juego, "Hay obstaculos en el camino para el agente: " + id.getLocalName(), "Error Agente", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            juego.getMapa().getAgentes().get(i).setCamino(camino);
+                            juego.getMapa().getAgentes().get(i).start();
+                        }
 
                     }
                 }
@@ -146,8 +151,12 @@ public class AgenteEJADE extends GuiAgent {
                         ACLMessage recibirCaminoAgente = blockingReceive();
                         if (recibirCaminoAgente != null) {
                             LinkedList<Nodo> camino = (LinkedList<Nodo>) recibirCaminoAgente.getContentObject();
-                            juego.getMapa().getAgentes().get(i).setCamino(camino);
-                            juego.getMapa().getAgentes().get(i).start();
+                            if (camino.isEmpty()) {
+                                JOptionPane.showMessageDialog(juego, "Hay obstaculos en el camino para el agente: " + id.getLocalName(), "Error Agente", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                juego.getMapa().getAgentes().get(i).setCamino(camino);
+                                juego.getMapa().getAgentes().get(i).start();
+                            }
                         }
                     } catch (IOException ex) {
                         System.out.println("Error en la serializacion: " + ex.toString());

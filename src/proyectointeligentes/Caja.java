@@ -16,7 +16,6 @@ public class Caja extends Cuadro{
     public Caja(int i, int j) {
         super(i, j);
         setRutaImagen("img/caja.png");
-//        setTipo("caja");
         asignado=false;
     }
 

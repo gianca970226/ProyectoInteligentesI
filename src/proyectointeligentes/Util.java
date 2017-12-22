@@ -173,6 +173,7 @@ public class Util implements Serializable {
     }
     
     public LinkedList<Nodo> ejecutarJuegoUnAgente(Cuadro agentep, Cuadro cajap, Cuadro marcadorp, Mapa mapap) {
+        try {
         Agente agente = (Agente)agentep;
         AEstrellaCM aEstrellaCM = new AEstrellaCM(); //Hago objeto de algoritmo estrella, que mira las acomodaciones para el agente
         AEstrellaAM aEstrellaAM = new AEstrellaAM();
@@ -184,17 +185,17 @@ public class Util implements Serializable {
         Caja caja = (Caja) cajap; //Tomo la caja seleccion
         Nodo finAgente = aEstrellaAM.actualizarFinAgente(cuadrar, caja, mapap); //Nodo para cambiar el nodo fin al agente
         LinkedList<Nodo> caminoAgenteCaja = aEstrellaAM.ejecutar(nodoAgente, finAgente, mapap); //Obtengo el camino del agente
-        caminoAgenteCaja.add(new Nodo(caja));
-        agente.setCamino(caminoAgenteCaja); //Seteo el primer camino al agente
-        Nodo auxNodoInicio = caminoAgenteCaja.getLast();
-        LinkedList<Nodo> caminoNuevo = new LinkedList<>();
-        Mapa auxMapa = mapap.clonarMapa();
-        Agente auxAgente = (Agente) agente.clone();
-        Caja auxCaja = (Caja) caja.clone();
-        for (int i = 0; i < caminoCajaMarcador.size() - 1; i++) {
-            auxMapa.getMapaM()[caminoCajaMarcador.get(i).getI()][caminoCajaMarcador.get(i).getJ()] = auxCaja;
-            auxMapa.getMapaM()[auxCaja.getI()][auxCaja.getJ()] = new Cuadro(auxCaja.getI(), auxCaja.getJ());
-            auxCaja.setI(caminoCajaMarcador.get(i).getI());
+        caminoAgenteCaja.add(new Nodo(caja)); //Le agrego el nodo donde esta la caja al final del camino del agente a la caja
+        agente.setCamino(caminoAgenteCaja); //Seteo el camino del agente a la caja
+        Nodo auxNodoInicio = caminoAgenteCaja.getLast(); //Obtengo el ultimo nodo del camino agente caja que es la posicion de la caja
+        LinkedList<Nodo> caminoNuevo = new LinkedList<>(); //Creo una lista nueva de camino
+        Mapa auxMapa = mapap.clonarMapa(); //Clono mapa
+        Agente auxAgente = (Agente) agente.clone(); //Clono el agente
+        Caja auxCaja = (Caja) caja.clone(); //Clono la caja
+        for (int i = 0; i < caminoCajaMarcador.size() - 1; i++) {//Cojo el caminod e la caja al marcador
+            auxMapa.getMapaM()[caminoCajaMarcador.get(i).getI()][caminoCajaMarcador.get(i).getJ()] = auxCaja; //Muevo la caja a una posicion que da el camino
+            auxMapa.getMapaM()[auxCaja.getI()][auxCaja.getJ()] = new Cuadro(auxCaja.getI(), auxCaja.getJ()); //Hago un cuadro donde antes estaba la caja
+            auxCaja.setI(caminoCajaMarcador.get(i).getI()); //Seteo las posiciones de la caja
             auxCaja.setJ(caminoCajaMarcador.get(i).getJ());
             Nodo nodoOpuesto = aEstrellaAM.nodoOpuesto(caminoCajaMarcador.get(i), caminoCajaMarcador.get(i + 1), auxMapa);
             if (aEstrellaAM.diagonal(auxNodoInicio, nodoOpuesto)) {
@@ -206,12 +207,17 @@ public class Util implements Serializable {
             }
             auxNodoInicio = caminoNuevo.getLast();
             auxMapa.getMapaM()[auxNodoInicio.getI()][auxNodoInicio.getJ()] = auxAgente;
-            auxMapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()] = new Cuadro(agente.getI(), agente.getJ());
+            auxMapa.getMapaM()[auxAgente.getI()][auxAgente.getJ()] = new Cuadro(auxAgente.getI(), auxAgente.getJ());
             auxAgente.setI(auxNodoInicio.getI());
             auxAgente.setJ(auxNodoInicio.getJ());
         }
         agente.getCamino().addAll(caminoNuevo); //Luego el segundo camino
         return agente.getCamino();    
+        }
+        catch(Exception exception)
+        {
+            return new LinkedList<>();
+        }
     }
     
 }

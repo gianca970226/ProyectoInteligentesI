@@ -36,83 +36,83 @@ public class Mapa implements Serializable {
         this.cajas = new LinkedList<>();
     }
 
-//    public void EncontrarACM(Panel panel) {
-//        LinkedList<Caja> cajasTemp = new LinkedList<>();
-//        LinkedList<Marcador> marcadoresTemp = new LinkedList<>();
-//        for (int i = 0; i < n; i++) {
-//            for (int j = 0; j < n; j++) {
-//                if (mapaM[i][j] instanceof Agente) {
-//                    Agente agente = (Agente) mapaM[i][j];
-//                    agente.setMapa(this);
-//                    agente.setPanel(panel);
-//                    agente.isAsignado();
-//                    agentes.add((Agente) mapaM[i][j]);
-//                }
-//                if (this.mapaM[i][j] instanceof Caja) {
-//                    cajasTemp.add((Caja) mapaM[i][j]);
-////                    cajas.add((Caja) mapaM[i][j]);
-//                }
-//                if (this.mapaM[i][j] instanceof Marcador) {
-////                    marcadores.add((Marcador) mapaM[i][j]);
-//                    marcadoresTemp.add((Marcador) mapaM[i][j]);
-//                }
-//            }
-//        }
-//        int distancia = 100000;
-//        Marcador seleccionM = null;
-//        for (int i = 0; i < agentes.size(); i++) {
-//            distancia=100000;
-//            for (int j = 0; j < marcadoresTemp.size(); j++) {
-//                if (!marcadoresTemp.get(j).isAsignado()) {
-//                    int distanciaC = Math.abs(agentes.get(i).getI() - marcadoresTemp.get(j).getI()) + Math.abs(agentes.get(i).getJ() - marcadoresTemp.get(j).getJ());
-//                    if (distanciaC < distancia) {
-//                        seleccionM = marcadoresTemp.get(j);
-//                        distancia = distanciaC;
-//                    }
-//                }
-//            }
-//            seleccionM.setAsignado(true);
-//            marcadores.add(seleccionM);
-//        }
-//        
-//        distancia = 100000;
-//        Caja seleccionC = null;
-//        for (int i = 0; i < agentes.size(); i++) {
-//            distancia=100000;
-//            for (int j = 0; j < cajasTemp.size(); j++) {
-//                if (!cajasTemp.get(j).isAsignado()) {
-//                    int distanciaC = Math.abs(agentes.get(i).getI() - cajasTemp.get(j).getI()) + Math.abs(agentes.get(i).getJ() - cajasTemp.get(j).getJ());
-//                    if (distanciaC < distancia) {
-//                        seleccionC = cajasTemp.get(j);
-//                        distancia = distanciaC;
-//                    }
-//                }
-//            }
-//            seleccionC.setAsignado(true);
-//            cajas.add(seleccionC);
-//        }
-//
-//    }
-
     public void EncontrarACM(Panel panel) {
-        for (int i = 0; i < n; i++) {
+        LinkedList<Caja> cajasTemp = new LinkedList<>(); //Hago una lista de cajas temporales
+        LinkedList<Marcador> marcadoresTemp = new LinkedList<>(); //Hago una lista de marcadores temporales
+        for (int i = 0; i < n; i++) { //Recorro
             for (int j = 0; j < n; j++) {
-                if (mapaM[i][j] instanceof Agente) {
-                    Agente agente=(Agente) mapaM[i][j];
+                if (mapaM[i][j] instanceof Agente) { //si es una instance de agente, le seteo el mapa y el panel ademas queda como asignado y lo guardo en la lista de agentes
+                    Agente agente = (Agente) mapaM[i][j];
                     agente.setMapa(this);
                     agente.setPanel(panel);
+                    agente.isAsignado();
                     agentes.add((Agente) mapaM[i][j]);
                 }
-                if (this.mapaM[i][j] instanceof Caja) {
-                    cajas.add((Caja) mapaM[i][j]);
+                if (mapaM[i][j] instanceof Caja) { //Si es una caja la guardo en la lista de cajas temporales
+                    cajasTemp.add((Caja) mapaM[i][j]);
+//                    cajas.add((Caja) mapaM[i][j]);
                 }
-                if (this.mapaM[i][j] instanceof Marcador) {
-                    marcadores.add((Marcador) mapaM[i][j]);
+                if (mapaM[i][j] instanceof Marcador) { //Si es un marcador la guardo en la lista de marcadores
+//                    marcadores.add((Marcador) mapaM[i][j]);
+                    marcadoresTemp.add((Marcador) mapaM[i][j]);
                 }
             }
         }
+        int distancia = 100000; 
+        Marcador seleccionM = null;
+        for (int i = 0; i < agentes.size(); i++) { //hago un recorrido de los agentes
+            distancia=100000; //Tengo una distancia alta
+            for (int j = 0; j < marcadoresTemp.size(); j++) { //Por cada agente hago un recorrido de los marcadores temporales
+                if (!marcadoresTemp.get(j).isAsignado()) { //Si el marcador no esta ya asignado
+                    int distanciaC = Math.abs(agentes.get(i).getI() - marcadoresTemp.get(j).getI()) + Math.abs(agentes.get(i).getJ() - marcadoresTemp.get(j).getJ()); //Obtengo la distancia del agente y el marcador
+                    if (distanciaC < distancia) { //Si la distancia obtenida es menor
+                        seleccionM = marcadoresTemp.get(j); //Cojo el marcador con menor distancia
+                        distancia = distanciaC; //Actualizo la menor distancia hasta el momento
+                    }
+                }
+            }
+            seleccionM.setAsignado(true); //Asigno el marcador
+            marcadores.add(seleccionM);
+        }
+        
+        distancia = 100000;
+        Caja seleccionC = null;
+        for (int i = 0; i < agentes.size(); i++) { //Recorro los agentes
+            distancia=100000;
+            for (int j = 0; j < cajasTemp.size(); j++) { //Recorro las cajas
+                if (!cajasTemp.get(j).isAsignado()) {
+                    int distanciaC = Math.abs(agentes.get(i).getI() - cajasTemp.get(j).getI()) + Math.abs(agentes.get(i).getJ() - cajasTemp.get(j).getJ());
+                    if (distanciaC < distancia) {
+                        seleccionC = cajasTemp.get(j);
+                        distancia = distanciaC;
+                    }
+                }
+            }
+            seleccionC.setAsignado(true);
+            cajas.add(seleccionC);
+        }
+
     }
-    public Mapa clonarMapa() {
+
+//    public void EncontrarACM(Panel panel) {
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                if (mapaM[i][j] instanceof Agente) {
+//                    Agente agente=(Agente) mapaM[i][j];
+//                    agente.setMapa(this);
+//                    agente.setPanel(panel);
+//                    agentes.add((Agente) mapaM[i][j]);
+//                }
+//                if (this.mapaM[i][j] instanceof Caja) {
+//                    cajas.add((Caja) mapaM[i][j]);
+//                }
+//                if (this.mapaM[i][j] instanceof Marcador) {
+//                    marcadores.add((Marcador) mapaM[i][j]);
+//                }
+//            }
+//        }
+//    }
+    public Mapa clonarMapa() { //Permite clonar un mapa totalmente
         Cuadro[][] auxMapaM = new Cuadro[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -124,7 +124,7 @@ public class Mapa implements Serializable {
     }
 
     //El agente que se le manda como parametro es el que colisiono y debe volver a moverse
-    public Mapa eliminarPanelMapaM(Agente agente) {
+    public Mapa eliminarPanelMapaM(Agente agente) { //Devuelve un mapa sin el panel dentro de los agentes
         Cuadro mapaMNuevo[][] = new Cuadro[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
